@@ -1,3 +1,4 @@
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -6,44 +7,68 @@ from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from web_app.models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-from web_app.api.permissions import AdminOrReadOnly, CommentUserOrReadOnly
+from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
 
 
-class PostVS(viewsets.ViewSet):
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def list(self, request):
-        queryset = Post.objects.all()
-        serializer = PostSerializer(queryset, many=True)
-        return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Post.objects.all()
-        post = get_object_or_404(queryset, pk=pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsPostUserOrReadOnly]
 
-    def create(self, request):
-        serializer = PostSerializer(data=request.data)
-        post_user = self.request.user
-        if serializer.is_valid():
-            serializer.save(post_author=post_user)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
 
-    def update(self, request, pk):
-        queryset = Post.objects.get(pk=pk)
-        serializer = PostSerializer(queryset, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+class PostCreate(generics.CreateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
 
-    def destroy(self, request, pk):
-        queryset = Post.objects.get(pk=pk)
-        queryset.delete()
-        return Response(status=204)
+    def get_queryset(self):
+        return Post.objects.all()
+
+    def perform_create(self, serializer):
+        post_author = self.request.user
+        serializer.save(post_author=post_author)
+
+# class PostVS(viewsets.ViewSet):
+#     permission_classes = [IsAuthenticated]
+#
+#     def list(self, request):
+#         queryset = Post.objects.all()
+#         serializer = PostSerializer(queryset, many=True)
+#         return Response(serializer.data)
+#
+#     def retrieve(self, request, pk=None):
+#         queryset = Post.objects.all()
+#         post = get_object_or_404(queryset, pk=pk)
+#         serializer = PostSerializer(post)
+#         return Response(serializer.data)
+#
+#     def create(self, request):
+#         serializer = PostSerializer(data=request.data)
+#         post_user = self.request.user
+#         if serializer.is_valid():
+#             serializer.save(post_author=post_user)
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
+#
+#     def update(self, request, pk):
+#         queryset = Post.objects.get(pk=pk)
+#         serializer = PostSerializer(queryset, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
+#
+#     def destroy(self, request, pk):
+#         queryset = Post.objects.get(pk=pk)
+#         queryset.delete()
+#         return Response(status=204)
 
 
 class CommentList(generics.ListCreateAPIView):
@@ -59,11 +84,12 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [CommentUserOrReadOnly]
+    permission_classes = [IsCommentUserOrReadOnly]
 
 
 class CommentCreate(generics.CreateAPIView):
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Comment.objects.all()

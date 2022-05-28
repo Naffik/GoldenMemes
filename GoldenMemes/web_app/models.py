@@ -29,6 +29,7 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     content = models.TextField(max_length=2048)
+    # status = models.
 
     def __str__(self):
         return str(self.comment_author)
