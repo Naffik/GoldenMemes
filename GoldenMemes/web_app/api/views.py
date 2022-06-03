@@ -7,15 +7,19 @@ from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework.throttling import UserRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from web_app.models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
+from web_app.api.pagination import PostPagination
 
 
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -91,6 +95,8 @@ class CommentList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['comment_author__username', 'post__title']
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['comment_author__username', 'post__title']
 
     # def get_queryset(self):
     #     pk = self.kwargs.get('pk')

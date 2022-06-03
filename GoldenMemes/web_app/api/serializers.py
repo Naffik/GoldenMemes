@@ -13,9 +13,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
+    # comments = CommentSerializer(many=True, read_only=True)
     post_author = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Post
-        fields = "__all__"
+        exclude = ('number_of_comments',)
+        # fields = "__all__"
