@@ -5,12 +5,14 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from rest_framework.throttling import UserRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
 from web_app.models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
 
 
-class PostList(generics.ListCreateAPIView):
+class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -71,10 +73,25 @@ class PostCreate(generics.CreateAPIView):
 #         return Response(status=204)
 
 
-class CommentList(generics.ListCreateAPIView):
+class PostCommentList(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comment_author__username', 'post__title']
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return Comment.objects.filter(post=pk)
+
+
+class CommentList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comment_author__username', 'post__title']
+
     # def get_queryset(self):
     #     pk = self.kwargs.get('pk')
     #     comment_author = self.request.user
