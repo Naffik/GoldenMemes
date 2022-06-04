@@ -13,7 +13,7 @@ class CommentInLine(admin.StackedInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'post_author', 'title', 'status']
-    list_filter = ['date', 'status']
+    list_filter = ['created', 'status']
     search_fields = ['title']
     inlines = [
         CommentInLine

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
 from datetime import datetime
 
 STATUS_CHOICE = (
@@ -12,8 +13,8 @@ STATUS_CHOICE = (
 class Post(models.Model):
     title = models.CharField(max_length=255)
     post_author = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)  # change name to created
-    # meme = models.FileField(upload_to='images/', null=True, verbose_name="")
+    created = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='images/', null=False, verbose_name="")
     like = models.IntegerField(null=True, default=0)
     dislike = models.IntegerField(null=True, default=0)
     status = models.CharField(choices=STATUS_CHOICE, default='new', max_length=255)

@@ -21,11 +21,26 @@ class PostList(generics.ListAPIView):
     pagination_class = PostPagination
 
 
-
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsPostUserOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        return Post.objects.filter(pk=pk)
+
+    def perform_destroy(self, instance):
+        instance.image.delete()
+        instance.delete()
+
+    def perform_update(self, serializer):
+        post = Post.objects.get(pk=self.kwargs.get('pk'))
+        try:
+            post.image.delete()
+        except FileNotFoundError:
+            pass
+        serializer.save()
 
 
 class PostCreate(generics.CreateAPIView):
@@ -84,7 +99,7 @@ class PostCommentList(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['comment_author__username', 'post__title']
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         pk = self.kwargs.get('pk')
         return Comment.objects.filter(post=pk)
 
