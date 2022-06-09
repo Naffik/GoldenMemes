@@ -12,7 +12,7 @@ class CommentInLine(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['id', 'post_author', 'title', 'status']
+    list_display = ['id', 'post_author', 'title', 'status', 'slug']
     list_filter = ['created', 'status']
     search_fields = ['title']
     inlines = [
