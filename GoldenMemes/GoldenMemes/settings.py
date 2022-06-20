@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.redirects',
     'web_app',
     'rest_framework',
     'rest_framework.authtoken',
@@ -50,7 +52,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 ]
+
+SITE_ID = 1
 
 ROOT_URLCONF = 'GoldenMemes.urls'
 
@@ -84,12 +89,12 @@ WSGI_APPLICATION = 'GoldenMemes.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'GoldenMemes',
         'USER': 'postgres',
-        'PASSWORD': 'Poldiocslen123',
+        'PASSWORD': 'postgres',
         'PORT': '5432',
-        'HOST': 'localhost'
+        'HOST': 'db'
     }
 }
 

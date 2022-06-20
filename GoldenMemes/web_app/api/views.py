@@ -5,6 +5,9 @@ from web_app.models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
 from web_app.api.pagination import PostPagination
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.template.defaultfilters import slugify
 
 
 class PostList(generics.ListAPIView):
@@ -17,40 +20,25 @@ class PostList(generics.ListAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsPostUserOrReadOnly]
+    # permission_classes = [IsPostUserOrReadOnly]
 
     def get_queryset(self, *args, **kwargs):
-        return Post.objects.filter(pk=self.kwargs.get('pk'))
+        return Post.objects.filter(pk=self.kwargs.get('pk')).filter(slug=self.kwargs.get('slug'))
 
     def perform_destroy(self, instance):
         instance.image.delete()
         instance.delete()
+
+    def update(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        slug = slugify(request.data.get('title'))
+        response = super(PostDetail, self).update(request, pk=pk, slug=slug)
+        print(reverse('post-detail', kwargs={'pk': pk, 'slug': slug}))
+        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000'
+                                                + reverse('post-detail', kwargs={'pk': pk, 'slug': slug}))
 
     def perform_update(self, serializer):
         post = Post.objects.get(pk=self.kwargs.get('pk'))
-        try:
-            post.image.delete()
-        except FileNotFoundError:
-            pass
-        serializer.save()
-
-
-class PostDetailSlug(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    lookup_field = 'slug'
-    permission_classes = [IsPostUserOrReadOnly]
-
-    def get_queryset(self, *args, **kwargs):
-        slug = self.kwargs.get('slug')
-        return Post.objects.filter(slug=slug)
-
-    def perform_destroy(self, instance):
-        instance.image.delete()
-        instance.delete()
-
-    def perform_update(self, serializer):
-        post = Post.objects.get(slug=self.kwargs.get('slug'))
         try:
             post.image.delete()
         except FileNotFoundError:

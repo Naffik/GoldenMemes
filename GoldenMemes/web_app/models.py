@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils.crypto import get_random_string
-from django.urls import reverse
+
 
 STATUS_CHOICE = (
     ('new', 'Meme is not accepted'),
@@ -10,13 +10,13 @@ STATUS_CHOICE = (
     ('rejected', 'Meme is rejected')
 )
 
-
-def unique_slugify(instance, slug):
-    model = instance.__class__
-    unique_slug = slug
-    while model.objects.filter(slug=unique_slug).exists():
-        unique_slug = slug + "-" + get_random_string(length=4)
-    return unique_slug
+#
+# def unique_slugify(instance, slug):
+#     model = instance.__class__
+#     unique_slug = slug
+#     while model.objects.filter(slug=unique_slug).exists():
+#         unique_slug = slug + "-" + get_random_string(length=4)
+#     return unique_slug
 
 
 class Post(models.Model):
@@ -31,8 +31,7 @@ class Post(models.Model):
     number_of_comments = models.IntegerField(null=True, default=0)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = unique_slugify(self, slugify(self.title))
+        self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -15,9 +15,9 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'post_author', 'title', 'status', 'slug']
     list_filter = ['created', 'status']
     search_fields = ['title']
-    inlines = [
-        CommentInLine
-    ]
+    # inlines = [
+    #     CommentInLine
+    # ]
 
 
 @admin.register(Comment)
