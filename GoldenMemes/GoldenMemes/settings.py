@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.redirects',
     'web_app',
+    'user_app',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
