@@ -65,7 +65,7 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         user = get_object_or_404(User, username=self.kwargs.get('user'))
-        profile = UserProfile.objects.get(user=user.id)
+        profile = UserProfile.objects.filter(user__username=self.kwargs.get('user'))
         try:
             profile.profile_picture.delete()
         except FileNotFoundError:
