@@ -1,0 +1,56 @@
+@import "../styles/globals.scss";
+
+header {
+  display: flex;
+  width: 100%;
+  height: $header_height;
+  font-family: $font_logo;
+  background-color: $blackColor;
+
+  @include sm {
+    height: $header_height_sm;
+  }
+
+  .header__wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // padding: 0px 16px;
+
+    h1 {
+      font-weight: 400;
+      font-size: 36px;
+      color: $goldColor;
+
+      @include sm {
+        font-size: 24px;
+      }
+    }
+  }
+
+  nav {
+    ul {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 32px;
+      margin: 0;
+      list-style: none;
+
+      ul:first-child {
+        @include md {
+          display: none;
+        }
+      }
+
+      .hamburgerMenu {
+        display: none;
+
+        @include md {
+          display: block;
+        }
+      }
+    }
+  }
+}
