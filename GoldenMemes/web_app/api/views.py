@@ -20,25 +20,25 @@ class PostList(generics.ListAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = [IsPostUserOrReadOnly]
+    permission_classes = [IsPostUserOrReadOnly]
 
     def get_queryset(self, *args, **kwargs):
-        return Post.objects.filter(pk=self.kwargs.get('pk')).filter(slug=self.kwargs.get('slug'))
+        return Post.objects.filter(slug=self.kwargs.get('slug'))
 
     def perform_destroy(self, instance):
         instance.image.delete()
         instance.delete()
 
     def update(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
+        # pk = self.kwargs.get('pk')
         slug = slugify(request.data.get('title'))
         response = super(PostDetail, self).update(request, pk=pk, slug=slug)
-        print(reverse('post-detail', kwargs={'pk': pk, 'slug': slug}))
+        print(reverse('post-detail', kwargs={'slug': slug}))
         return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000'
-                                                + reverse('post-detail', kwargs={'pk': pk, 'slug': slug}))
+                                                + reverse('post-detail', kwargs={'slug': slug}))
 
     def perform_update(self, serializer):
-        post = Post.objects.get(pk=self.kwargs.get('pk'))
+        post = Post.objects.filter(slug=self.kwargs.get('slug'))
         try:
             post.image.delete()
         except FileNotFoundError:
@@ -100,11 +100,9 @@ class CommentCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
-        post_id = Post.objects.get(pk=pk)
-
+        post = Post.objects.get(pk=pk)
         comment_user = self.request.user
+        post.number_of_comments = post.number_of_comments + 1
+        post.save()
 
-        post_id.number_of_comments = post_id.number_of_comments + 1
-        post_id.save()
-
-        serializer.save(post=post_id, comment_author=comment_user)
+        serializer.save(post=post, comment_author=comment_user)

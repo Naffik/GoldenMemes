@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from user_app.models import UserProfile
 from django.utils.crypto import get_random_string
 
 
@@ -21,14 +22,14 @@ STATUS_CHOICE = (
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    slug = models.SlugField(max_length=100, unique=False, blank=True)
     post_author = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='media/images/', null=False, verbose_name="")
     like = models.IntegerField(null=True, default=0)
     dislike = models.IntegerField(null=True, default=0)
-    favourite = models.ManyToManyField(User, related_name="favourite", blank=True)
     status = models.CharField(choices=STATUS_CHOICE, default='new', max_length=255)
+    favourite = models.ManyToManyField(UserProfile, related_name="favourite", blank=True)
     number_of_comments = models.IntegerField(null=True, default=0)
 
     def save(self, *args, **kwargs):
@@ -41,8 +42,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    comment_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments_author")
-    date = models.DateTimeField(auto_now_add=True)
+    comment_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment_author")
+    created = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     content = models.TextField(max_length=2048)
 
