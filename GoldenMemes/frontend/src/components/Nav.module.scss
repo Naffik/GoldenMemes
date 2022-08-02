@@ -5,7 +5,7 @@ header {
   width: 100%;
   height: $header_height;
   font-family: $font_logo;
-  background-color: $blackColor;
+  background-color: $secondaryColor;
 
   @include sm {
     height: $header_height_sm;
@@ -20,7 +20,7 @@ header {
 
     h1 {
       font-weight: 400;
-      font-size: 36px;
+      font-size: 32px;
       color: $goldColor;
 
       @include sm {

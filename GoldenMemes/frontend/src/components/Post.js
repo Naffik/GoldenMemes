@@ -30,7 +30,7 @@ function Post(props) {
             </div>
           </div>
           <div className={styles.container__wrapper__bottombar_iconContainer}>
-            <span style={{ marginRight: 4 }}>{comments}</span>
+            <span style={{ marginRight: 8 }}>{comments}</span>
             <FaComment className={styles.container__wrapper__bottombar_icon} color="#E0A610" />
           </div>
         </div>
