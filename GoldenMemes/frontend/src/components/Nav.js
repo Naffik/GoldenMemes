@@ -4,15 +4,16 @@ import Wrapper from "./Wrapper";
 import ListItem from "./ListItem";
 
 import { IoMdAdd, IoMdPerson, IoMdMenu } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 function Nav() {
   return (
     <header>
       <Wrapper>
         <div className={styles.header__wrapper}>
-          <a href="/">
+          <Link to="/">
             <h1>Golden Memes</h1>
-          </a>
+          </Link>
           <nav>
             <ul>
               <ListItem text="Dodaj" icon={<IoMdAdd size={24} color="#c5a880" />} link="/add" />

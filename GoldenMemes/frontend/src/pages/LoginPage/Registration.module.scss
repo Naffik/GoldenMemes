@@ -1,15 +1,5 @@
 @import "../../styles/globals.scss";
 
-.loginReminder {
-  font-size: 14px;
-  color: #949494;
-
-  &_link {
-    font-weight: 500;
-    color: $whiteColor;
-  }
-}
-
 form {
   display: flex;
   flex-direction: column;

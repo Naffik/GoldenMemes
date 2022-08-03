@@ -1,16 +1,12 @@
 import React from "react";
 import styles from "./CustomInput.module.scss";
+import { useFormikContext } from "formik";
 
-function CustomInput({ name, placeholder, value, onChange }) {
+function CustomInput({ name, ...otherProps }) {
+  const { handleChange, values } = useFormikContext();
+
   return (
-    <input
-      className={styles.input}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => onChange(e)}
-      required
-    />
+    <input className={styles.input} name={name} value={values[name]} onChange={handleChange(name)} {...otherProps} />
   );
 }
 

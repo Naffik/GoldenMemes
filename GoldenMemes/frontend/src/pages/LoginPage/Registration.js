@@ -1,10 +1,11 @@
 import React from "react";
-import styles from "./Registration.module.scss";
+import "./Registration.module.scss";
 
-import { Link } from "react-router-dom";
-import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import SubpageContainer from "../../components/SubpageContainer";
+import CustomForm from "../../components/CustomForm";
+import SubmitButton from "../../components/SubmitButton";
+import FormInfoText from "../../components/FormInfoText";
 
 function Registration() {
   return (
@@ -13,31 +14,26 @@ function Registration() {
       titleBody="Załóż konto i korzystaj z takich funkcji jak dodawanie memów, dodawanie do ulubionych, udział w konkursach
     i nie tylko!"
     >
-      <form>
-        <CustomInput name="username" placeholder="nazwa użytkownika" value="" onChange={() => console.log("literka")} />
-        <CustomInput name="email" placeholder="e-mail" value="" onChange={() => console.log("literka")} />
-        <CustomInput
-          name="password"
-          placeholder="hasło"
-          type="password"
-          value=""
-          onChange={() => console.log("literka")}
-        />
-        <CustomInput
-          name="password2"
-          placeholder="powtórz hasło"
-          type="password"
-          value=""
-          onChange={() => console.log("literka")}
-        />
-        <CustomButton value="Zarejestruj" />
-        <span className={styles.loginReminder}>
-          Masz konto?{"  "}
-          <Link to="/login" className={styles.loginReminder_link}>
-            Zaloguj się
-          </Link>
-        </span>
-      </form>
+      <CustomForm
+        initialValues={{
+          username: "",
+          email: "",
+          password: "",
+          password2: "",
+        }}
+        onSubmit={(values) => {
+          alert(JSON.stringify(values, null, 2));
+        }}
+      >
+        <form>
+          <CustomInput name="username" placeholder="nazwa użytkownika" type="text" />
+          <CustomInput name="email" placeholder="e-mail" type="text" />
+          <CustomInput name="password" placeholder="hasło" type="password" />
+          <CustomInput name="password2" placeholder="powtórz hasło" type="password" />
+          <SubmitButton value="Zarejestruj" />
+          <FormInfoText text="Masz konto?" linkPath="/login" linkText="Zaloguj się" />
+        </form>
+      </CustomForm>
     </SubpageContainer>
   );
 }
