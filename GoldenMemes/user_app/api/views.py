@@ -1,78 +1,88 @@
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import User
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import generics
-from user_app.api.serializers import RegistrationSerializer, UserProfileSerializer
-from user_app.models import UserProfile
-
+from user_app.models import User
+from user_app.api.serializers import RegistrationSerializer
+from user_app.api.utils import Util
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+import jwt
+from django.conf import settings
 
 # @api_view(['POST'],)
-# def logout_view(request):
+# def registration_view(request):
 #
 #     if request.method == 'POST':
-#         request.user.auth_token.delete()
-#         return Response(status=status.HTTP_200_OK)
+#         serializer = RegistrationSerializer(data=request.data)
+#
+#         data = {}
+#
+#         if serializer.is_valid():
+#             print('dupa')
+#             account = serializer.save()
+#
+#             data['response'] = "Registraion successful!"
+#             data['username'] = account.username
+#             data['email'] = account.email
+#
+#             refresh = RefreshToken.for_user(account)
+#             data['token'] = {
+#                                 'refresh': str(refresh),
+#                                 'access': str(refresh.access_token),
+#                             }
+#
+#         else:
+#             data = serializer.Errors()
+#
+#         return Response(data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['POST'],)
-def registration_view(request):
+class RegisterView(generics.GenericAPIView):
+    serializer_class = RegistrationSerializer
 
-    if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
-
-        data = {}
-
-        if serializer.is_valid():
-            account = serializer.save()
-
-            data['response'] = "Registraion successful!"
-            data['username'] = account.username
-            data['email'] = account.email
-
-            # token = Token.objects.get(user=account).key
-            # data['token'] = token
-
-            refresh = RefreshToken.for_user(account)
-            data['token'] = {
-                                'refresh': str(refresh),
-                                'access': str(refresh.access_token),
-                            }
-
-        else:
-            data = serializer.Errors()
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-
-class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
-    # permission_classes = []
-    print(queryset)
-    lookup_url_kwarg = 'user'
-    lookup_field = 'user__username'
-
-    def get_queryset(self, *args, **kwargs):
-        return UserProfile.objects.filter(user__username=self.kwargs.get('user'))
-
-    def perform_destroy(self, instance):
-        instance.profile_picture.delete()
-        instance.delete()
-
-    def perform_update(self, serializer):
-        user = get_object_or_404(User, username=self.kwargs.get('user'))
-        profile = UserProfile.objects.get(user=user.id)
-        try:
-            profile.profile_picture.delete()
-        except FileNotFoundError:
-            pass
+    def post(self, request):
+        user = request.data
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
+        user_data = serializer.data
+
+        user = User.objects.get(username=user_data['username'])
+
+        token = RefreshToken.for_user(user).access_token
+
+        current_site = get_current_site(request).domain
+        relative_link = reverse('email-verify')
+        abs_url = 'http://' + current_site + relative_link + "?token=" + str(token)
+        email_body = 'Hi ' + user.username + ' please verify your email address using below link \n' + abs_url
+        data = {
+            'email_body': email_body,
+            'email_subject': 'Verify your email address',
+            'mail_to': user_data['email']
+        }
+        Util.send_email(data)
+
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class UserProfileList(generics.ListAPIView):
-    queryset = UserProfile.objects.all().order_by('pk')
-    serializer_class = UserProfileSerializer
+class VerifyEmail(generics.GenericAPIView):
+
+    def get(self, request):
+        token = request.GET.get('token')
+        print(token)
+        try:
+            print(settings.SECRET_KEY)
+            payload = jwt.decode(token, settings.SECRET_KEY)
+            print('kurwa'+ payload)
+            user = User.objects.get(id=payload['user_id'])
+            print(user)
+            if not user.is_active:
+                user.is_active = True
+                user.save()
+            return Response({'email': 'Successfully verified'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError as e:
+            return Response({'error': 'Actication link expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as e:
+            return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)

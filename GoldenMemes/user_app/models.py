@@ -1,11 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    country = models.CharField(blank=True, max_length=250)
-    profile_picture = models.ImageField(upload_to='images/profiles/', null=True, blank=True)
-
-    def __str__(self):
-        return str(self.user.username)
+class User(AbstractUser):
+    nickname = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(default=False)

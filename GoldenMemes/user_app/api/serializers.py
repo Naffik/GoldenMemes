@@ -1,8 +1,6 @@
-from django.contrib.auth.models import User
+from user_app.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
-from user_app.models import UserProfile
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -16,7 +14,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
 
@@ -31,11 +28,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
 
         return account
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserProfile
-        # exclude = ('post',)
-        fields = "__all__"
