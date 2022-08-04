@@ -1,9 +1,16 @@
 import React from "react";
+import * as yup from "yup";
+
 import CustomInput from "../../components/CustomInput";
 import SubpageContainer from "../../components/SubpageContainer";
 import SubmitButton from "../../components/SubmitButton";
 import CustomForm from "../../components/CustomForm";
 import FormInfoText from "../../components/FormInfoText";
+
+const validationSchema = yup.object().shape({
+  username: yup.string().required().label("Username"),
+  password: yup.string().required().min(4).label("Password"),
+});
 
 function Login() {
   return (
@@ -16,6 +23,7 @@ function Login() {
             actions.setSubmitting(false);
           }, 1000);
         }}
+        validationSchema={validationSchema}
       >
         <form>
           <CustomInput name="username" placeholder="nazwa użytkownika" type="text" />

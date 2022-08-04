@@ -1,9 +1,9 @@
 import React from "react";
 import { Formik } from "formik";
 
-function CustomForm({ initialValues, onSubmit, children }) {
+function CustomForm({ initialValues, onSubmit, validationSchema, children }) {
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {() => <>{children}</>}
     </Formik>
   );
