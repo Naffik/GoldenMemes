@@ -1,8 +1,0 @@
-cd .\GoldenMemes\
-docker-compose build
-docker-compose up
-
-new terminal >
-docker exec -it django_container /bin/bash
-python manage.py migrate
-python manage.py createsuperuser

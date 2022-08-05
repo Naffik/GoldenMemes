@@ -16,7 +16,7 @@ function Nav() {
           </Link>
           <nav>
             <ul>
-              <ListItem text="Dodaj" icon={<IoMdAdd size={24} color="#c5a880" />} link="/add" />
+              <ListItem text="Dodaj" icon={<IoMdAdd size={25} color="#c5a880" />} link="/add" />
               <ListItem text="Zaloguj" icon={<IoMdPerson size={24} color="#c5a880" />} link="/login" />
               <IoMdMenu className={styles.hamburgerMenu} size={28} color="#c5a880" />
             </ul>
