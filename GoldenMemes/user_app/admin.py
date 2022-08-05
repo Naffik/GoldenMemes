@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import UserProfile
+from django.contrib.auth.admin import UserAdmin
+from .models import User
 
-# Register your models here.
 
-admin.site.register(UserProfile)
+fields = list(UserAdmin.fieldsets)
+fields[1] = ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'nickname')})
+UserAdmin.fieldsets = tuple(fields)
+
+admin.site.register(User, UserAdmin)

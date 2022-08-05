@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from user_app.models import UserProfile
-from django.utils.crypto import get_random_string
+from user_app.models import User
 
 
 STATUS_CHOICE = (
@@ -10,14 +8,6 @@ STATUS_CHOICE = (
     ('accepted', 'Meme is good enough'),
     ('rejected', 'Meme is rejected')
 )
-
-#
-# def unique_slugify(instance, slug):
-#     model = instance.__class__
-#     unique_slug = slug
-#     while model.objects.filter(slug=unique_slug).exists():
-#         unique_slug = slug + "-" + get_random_string(length=4)
-#     return unique_slug
 
 
 class Post(models.Model):
@@ -29,7 +19,6 @@ class Post(models.Model):
     like = models.IntegerField(null=True, default=0)
     dislike = models.IntegerField(null=True, default=0)
     status = models.CharField(choices=STATUS_CHOICE, default='new', max_length=255)
-    favourite = models.ManyToManyField(UserProfile, related_name="favourite", blank=True)
     number_of_comments = models.IntegerField(null=True, default=0)
 
     def save(self, *args, **kwargs):
@@ -49,3 +38,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.comment_author)
+
