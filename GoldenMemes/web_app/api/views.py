@@ -1,0 +1,108 @@
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from web_app.models import Post, Comment
+from .serializers import PostSerializer, CommentSerializer
+from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
+from web_app.api.pagination import PostPagination
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.template.defaultfilters import slugify
+
+
+class PostList(generics.ListAPIView):
+    queryset = Post.objects.all().order_by('pk')
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsPostUserOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        return Post.objects.filter(slug=self.kwargs.get('slug'))
+
+    def perform_destroy(self, instance):
+        instance.image.delete()
+        instance.delete()
+
+    def update(self, request, *args, **kwargs):
+        # pk = self.kwargs.get('pk')
+        slug = slugify(request.data.get('title'))
+        response = super(PostDetail, self).update(request, pk=pk, slug=slug)
+        print(reverse('post-detail', kwargs={'slug': slug}))
+        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000'
+                                                + reverse('post-detail', kwargs={'slug': slug}))
+
+    def perform_update(self, serializer):
+        post = Post.objects.filter(slug=self.kwargs.get('slug'))
+        try:
+            post.image.delete()
+        except FileNotFoundError:
+            pass
+        serializer.save()
+
+
+class PostCreate(generics.CreateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.all()
+
+    def perform_create(self, serializer):
+        post_author = self.request.user
+        serializer.save(post_author=post_author)
+
+
+class PostCommentList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comment_author__username', 'post__title']
+
+    def get_queryset(self, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        return Comment.objects.filter(post=pk)
+
+
+class CommentList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comment_author__username', 'post__title']
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['comment_author__username', 'post__title']
+
+    # def get_queryset(self):
+    #     pk = self.kwargs.get('pk')
+    #     comment_author = self.request.user
+    #     return Comment.objects.filter(post=pk, comment_author=comment_author)
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsCommentUserOrReadOnly]
+
+
+class CommentCreate(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Comment.objects.all()
+
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        post = Post.objects.get(pk=pk)
+        comment_user = self.request.user
+        post.number_of_comments = post.number_of_comments + 1
+        post.save()
+
+        serializer.save(post=post, comment_author=comment_user)
