@@ -1,0 +1,21 @@
+@import "../styles/globals.scss";
+
+.btn {
+  height: $input_height;
+  font-size: $fontSize_body_desktop;
+  font-weight: 500;
+  font-family: $font_stack;
+  color: $whiteColor;
+  background-color: $darkGoldColor;
+  border-radius: $input_radius;
+  border: none;
+  box-shadow: 0px 0px 24px rgba(197, 168, 128, 0.25);
+  cursor: pointer;
+  transition: 0.2s all ease;
+
+  &:hover {
+    background-color: darken($color: $darkGoldColor, $amount: 10);
+    box-shadow: 0px 0px 48px rgba(197, 168, 128, 0.25);
+    transition: 0.2s all ease;
+  }
+}

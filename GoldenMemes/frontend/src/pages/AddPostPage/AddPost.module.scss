@@ -1,0 +1,70 @@
+@import "../../styles/globals.scss";
+
+.container {
+  button {
+    width: 100%;
+    margin-top: 32px;
+
+    @include md {
+      width: auto;
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: $wrapper_padding;
+      right: $wrapper_padding;
+      bottom: var(--verticalPadding);
+    }
+  }
+
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 24px;
+    font-size: 32px;
+    font-weight: 500;
+    color: $grayColor;
+    border: none;
+    border-bottom: 3px solid $darkGoldColor;
+    background-color: transparent;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  input[type="file"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 150px;
+    background-color: transparent;
+    border: 1px solid $darkGoldColor;
+    border-radius: 4px;
+
+    &::-webkit-file-upload-button {
+      visibility: hidden;
+    }
+
+    &::before {
+      content: "Wybierz zdjęcie";
+      display: inline-block;
+      padding: 65px 8px;
+
+      font-size: 16px;
+      font-family: $font_stack;
+      text-align: center;
+      color: $grayColor;
+      background: $secondaryColor;
+      border: 1px solid $darkGoldColor;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+
+  &_imageInfo {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #949494;
+  }
+}
