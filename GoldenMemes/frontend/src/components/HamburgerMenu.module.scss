@@ -1,0 +1,21 @@
+@import "../styles/globals.scss";
+
+.container {
+  display: none;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: $header_height;
+  bottom: 0;
+  background-color: $secondaryColor;
+  z-index: 2;
+
+  @include md {
+    display: block;
+  }
+
+  @include sm {
+    top: $header_height_sm;
+  }
+}

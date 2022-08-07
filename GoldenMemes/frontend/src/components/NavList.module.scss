@@ -1,0 +1,24 @@
+@import "../styles/globals.scss";
+
+.list {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 32px;
+  margin: 0;
+  list-style: none;
+
+  @include md {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 48px;
+    padding: 0;
+  }
+
+  &_login {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
