@@ -123,19 +123,16 @@ class PostRandom(generics.RetrieveAPIView):
 
 
 class PostListBest(generics.ListAPIView):
-    queryset = Post.objects.all().order_by('-like')
+    queryset = Post.accepted.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
-
-    def get_queryset(self, *args, **kwargs):
-        return Post.objects.filter(status='accepted')
 
 
 class PostListFresh(generics.ListAPIView):
+    queryset = Post.new.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
 
-    def get_queryset(self, *args, **kwargs):
-        return Post.objects.filter(status='new').order_by('-created')
+
