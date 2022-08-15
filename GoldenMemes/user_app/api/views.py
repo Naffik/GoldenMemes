@@ -3,8 +3,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework_simplejwt.tokens import RefreshToken
-from user_app.models import User
-from user_app.api.serializers import RegistrationSerializer, RequestPasswordResetSerializer, SetNewPasswordSerializer
+from user_app.models import User, UserProfile
+from user_app.api.serializers import (RegistrationSerializer, RequestPasswordResetSerializer, SetNewPasswordSerializer,
+                                      UserProfileSerializer)
 from user_app.api.utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -111,3 +112,33 @@ class SetNewPasswordView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
+
+
+class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    # permission_classes = []
+    print(queryset)
+    lookup_url_kwarg = 'user'
+    lookup_field = 'user__username'
+
+    def get_queryset(self, *args, **kwargs):
+        return UserProfile.objects.filter(user__username=self.kwargs.get('user'))
+
+    def perform_destroy(self, instance):
+        instance.profile_picture.delete()
+        instance.delete()
+
+    def perform_update(self, serializer):
+        user = get_object_or_404(User, username=self.kwargs.get('user'))
+        profile = UserProfile.objects.filter(user__username=self.kwargs.get('user'))
+        try:
+            profile.profile_picture.delete()
+        except FileNotFoundError:
+            pass
+        serializer.save()
+
+
+class UserProfileList(generics.ListAPIView):
+    queryset = UserProfile.objects.all().order_by('pk')
+    serializer_class = UserProfileSerializer

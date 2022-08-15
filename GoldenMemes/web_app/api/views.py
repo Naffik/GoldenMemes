@@ -123,14 +123,14 @@ class PostRandom(generics.RetrieveAPIView):
 
 
 class PostListBest(generics.ListAPIView):
-    queryset = Post.accepted.all()
+    queryset = Post.objects.accepted()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
 
 
 class PostListFresh(generics.ListAPIView):
-    queryset = Post.new.all()
+    queryset = Post.objects.new()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination

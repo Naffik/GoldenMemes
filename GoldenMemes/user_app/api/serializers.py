@@ -1,5 +1,5 @@
 from django.contrib.sites.shortcuts import get_current_site
-from user_app.models import User
+from user_app.models import User, UserProfile
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -71,3 +71,10 @@ class SetNewPasswordSerializer(serializers.Serializer):
         except Exception as e:
             raise AuthenticationFailed('The reset link is invalid', 401)
         return super().validate(attrs)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserProfile
+        exclude = ('id', 'user',)
