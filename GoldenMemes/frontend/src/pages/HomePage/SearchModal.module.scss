@@ -1,8 +1,9 @@
 @import "../../styles/globals";
 
 .container {
+  visibility: hidden;
   position: fixed;
-  top: 0;
+  top: 95vh;
   left: 0;
   right: 0;
   bottom: 0;
@@ -11,7 +12,7 @@
   height: 100%;
   padding-top: 36px;
   background-color: $secondaryColor;
-  z-index: 5;
+  z-index: 3;
 
   &_exit {
     margin-left: auto;

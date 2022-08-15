@@ -8,11 +8,6 @@ import { IoIosSearch, IoIosClose } from "react-icons/io";
 import { slideSearch } from "../../animations/animations";
 
 function SearchModal({ exitModal, searchRef, formRef }) {
-  useEffect(() => {
-    console.log(searchRef.current);
-    slideSearch(searchRef.current, formRef.current);
-  }, []);
-
   return (
     <div ref={searchRef} className={styles.container}>
       <Wrapper>

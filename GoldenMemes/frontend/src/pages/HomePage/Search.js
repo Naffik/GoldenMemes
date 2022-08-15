@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import styles from "./Search.module.scss";
 import { IoIosSearch } from "react-icons/io";
 import SearchModal from "./SearchModal";
-import { slideSearch } from "../../animations/animations";
+import { exitSearch, slideSearch } from "../../animations/animations";
 
 function Search() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -10,11 +10,11 @@ function Search() {
   const formRef = useRef();
 
   const handleSearchClick = () => {
-    setSearchModalOpen(true);
+    slideSearch(searchRef.current, formRef.current);
   };
 
   const handleExitModal = () => {
-    setSearchModalOpen(false);
+    exitSearch(searchRef.current, formRef.current);
   };
 
   return (
@@ -24,7 +24,7 @@ function Search() {
           <span>Search</span>
           <IoIosSearch size={20} />
         </div>
-        {searchModalOpen && <SearchModal searchRef={searchRef} formRef={formRef} exitModal={handleExitModal} />}
+        <SearchModal searchRef={searchRef} formRef={formRef} exitModal={handleExitModal} />
       </div>
     </div>
   );
