@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Header.module.scss";
 
 import Wrapper from "./Wrapper";
-
 import Logo from "./Logo";
 import Nav from "./Nav";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
@@ -10,6 +9,14 @@ import HamburgerMenu from "./HamburgerMenu";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleMenuOpen = () => {
+    setMenuOpen(true);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <header>
@@ -19,19 +26,9 @@ function Header() {
           <Nav />
 
           {!menuOpen ? (
-            <IoMdMenu
-              className={styles.hamburgerMenuIcon}
-              onClick={() => setMenuOpen(true)}
-              size={28}
-              color="#c5a880"
-            />
+            <IoMdMenu className={styles.hamburgerMenuIcon} onClick={handleMenuOpen} size={28} color="#c5a880" />
           ) : (
-            <IoMdClose
-              className={styles.hamburgerMenuIcon}
-              onClick={() => setMenuOpen(false)}
-              size={28}
-              color="#c5a880"
-            />
+            <IoMdClose className={styles.hamburgerMenuIcon} onClick={handleMenuClose} size={28} color="#c5a880" />
           )}
           <HamburgerMenu visible={menuOpen} />
         </div>

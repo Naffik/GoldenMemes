@@ -1,5 +1,6 @@
 import React from "react";
 import * as yup from "yup";
+import styles from "./Registration.module.scss";
 
 import CustomInput from "../../components/CustomInput";
 import SubpageContainer from "../../components/SubpageContainer";
@@ -25,7 +26,7 @@ function Login() {
         }}
         validationSchema={validationSchema}
       >
-        <form>
+        <form className={styles.form}>
           <CustomInput name="username" placeholder="nazwa użytkownika" type="text" />
           <CustomInput name="password" placeholder="hasło" type="password" />
           <SubmitButton value="Zaloguj" />

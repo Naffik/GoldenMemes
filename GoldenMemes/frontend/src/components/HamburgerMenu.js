@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./HamburgerMenu.module.scss";
 import NavList from "./NavList";
 
 function HamburgerMenu({ visible }) {
+  if (!visible) return null;
+
   return (
     <>
-      {visible ? (
-        <div className={styles.container}>
-          <NavList mobileNav={true} />
-        </div>
-      ) : null}
+      <div className={styles.container}>
+        <NavList />
+      </div>
     </>
   );
 }

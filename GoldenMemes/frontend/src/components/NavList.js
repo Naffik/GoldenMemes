@@ -11,7 +11,7 @@ function NavList() {
   return (
     <ul className={styles.list}>
       <Link to="/add">
-        <CustomButton value="Dodaj mema" icon={<IoMdAdd size={23} color="#c5a880" />} />
+        <CustomButton value="Dodaj mema" icon={<IoMdAdd size={24} color="#c5a880" />} />
       </Link>
       <div className={styles.list_login}>
         <NavListItem text="Zaloguj" link="/login" />

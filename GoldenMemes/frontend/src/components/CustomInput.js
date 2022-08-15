@@ -2,13 +2,14 @@ import React from "react";
 import styles from "./CustomInput.module.scss";
 import { useFormikContext } from "formik";
 
-function CustomInput({ name, ...otherProps }) {
+function CustomInput({ inputRef = null, styling = "default", name, ...otherProps }) {
   const { handleChange, setFieldTouched, values, errors, touched } = useFormikContext();
 
   return (
     <>
       <input
-        className={styles.input}
+        ref={inputRef}
+        className={`${styles["input-default"]} ${styling && styles["input-" + styling]}`}
         name={name}
         value={values[name]}
         onBlur={() => setFieldTouched(name)}
