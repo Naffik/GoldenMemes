@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -120,12 +121,14 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsProfileUserOrReadOnly]
-    print(queryset)
     lookup_url_kwarg = 'user'
     lookup_field = 'user__username'
 
     def get_queryset(self, *args, **kwargs):
-        return UserProfile.objects.filter(user__username=self.kwargs.get('user'))
+        try:
+            return UserProfile.objects.filter(user__username=self.kwargs.get('user'))
+        except UserProfile.DoesNotExist:
+            raise Http404
 
     def perform_destroy(self, instance):
         instance.profile_picture.delete()
@@ -133,7 +136,7 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         user = get_object_or_404(User, username=self.kwargs.get('user'))
-        profile = UserProfile.objects.filter(user__username=self.kwargs.get('user'))
+        profile = UserProfile.objects.filter(user__username=user)
         try:
             profile.profile_picture.delete()
         except FileNotFoundError:
