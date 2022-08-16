@@ -1,0 +1,14 @@
+@import "../styles/globals.scss";
+
+.logo {
+  h1 {
+    font-weight: 400;
+    font-size: 32px;
+    font-family: $font_logo;
+    color: $goldColor;
+
+    @include sm {
+      font-size: 24px;
+    }
+  }
+}

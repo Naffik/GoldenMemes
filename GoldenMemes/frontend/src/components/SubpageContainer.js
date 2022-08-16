@@ -1,12 +1,12 @@
 import React from "react";
 import Wrapper from "./Wrapper";
 import styles from "./SubpageContainer.module.scss";
-import Nav from "./Nav";
+import Header from "./Header";
 
 function SubpageContainer({ title, titleBody = "", ...props }) {
   return (
     <>
-      <Nav />
+      <Header />
 
       <div className={styles.container}>
         <Wrapper>

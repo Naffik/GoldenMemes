@@ -1,5 +1,5 @@
 import React from "react";
-import "./Registration.module.scss";
+import styles from "./Registration.module.scss";
 import * as yup from "yup";
 
 import CustomInput from "../../components/CustomInput";
@@ -10,7 +10,7 @@ import FormInfoText from "../../components/FormInfoText";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required().label("Username"),
-  email: yup.string().required().email().label("Username"),
+  email: yup.string().required().email().label("E-mail"),
   password: yup.string().required().min(4).label("Password"),
   passwordRepeat: yup
     .string()
@@ -37,7 +37,7 @@ function Registration() {
         }}
         validationSchema={validationSchema}
       >
-        <form>
+        <form className={styles.form}>
           <CustomInput name="username" placeholder="nazwa użytkownika" type="text" />
           <CustomInput name="email" placeholder="e-mail" type="text" />
           <CustomInput name="password" placeholder="hasło" type="password" />
