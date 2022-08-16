@@ -15,6 +15,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
+from .permissions import IsProfileUserOrReadOnly, IsAdminOrReadOnly
 from .utils import Util
 
 
@@ -97,7 +98,8 @@ class PasswordTokenCheckView(generics.GenericAPIView):
                 return Response({'error': 'Token is no valid, please request a new one'},
                                 status=status.HTTP_401_UNAUTHORIZED)
 
-            return Response({'success': True, 'message': 'Credentials valid', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
+            return Response({'success': True, 'message': 'Credentials valid', 'uidb64': uidb64, 'token': token},
+                            status=status.HTTP_200_OK)
 
         except DjangoUnicodeDecodeError as e:
             if not PasswordResetTokenGenerator():
@@ -117,7 +119,7 @@ class SetNewPasswordView(generics.GenericAPIView):
 class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-    # permission_classes = []
+    permission_classes = [IsProfileUserOrReadOnly]
     print(queryset)
     lookup_url_kwarg = 'user'
     lookup_field = 'user__username'
@@ -142,3 +144,4 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserProfileList(generics.ListAPIView):
     queryset = UserProfile.objects.all().order_by('pk')
     serializer_class = UserProfileSerializer
+    permission_classes = [IsAdminOrReadOnly]
