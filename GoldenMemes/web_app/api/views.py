@@ -8,6 +8,7 @@ from web_app.api.pagination import PostPagination
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+import random
 
 
 class PostList(generics.ListAPIView):
@@ -106,3 +107,32 @@ class CommentCreate(generics.CreateAPIView):
         post.save()
 
         serializer.save(post=post, comment_author=comment_user)
+
+
+class PostRandom(generics.RetrieveAPIView):
+    serializer_class = PostSerializer
+    lookup_field = 'status'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        status = self.kwargs.get('status')
+        posts = list(Post.objects.filter(status=status).values_list('pk', flat=True))
+        r = random.choice(posts)
+        post = Post.objects.filter(pk=r)
+        return post
+
+
+class PostListBest(generics.ListAPIView):
+    queryset = Post.objects.accepted()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
+
+class PostListFresh(generics.ListAPIView):
+    queryset = Post.objects.new()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
+

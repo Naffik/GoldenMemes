@@ -10,7 +10,20 @@ STATUS_CHOICE = (
 )
 
 
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return super(PostManager, self).get_queryset().all()
+
+    def new(self):
+        return self.get_queryset().filter(status='new')
+
+    def accepted(self):
+        return self.get_queryset().filter(status='accepted')
+
+
 class Post(models.Model):
+    objects = PostManager()
+
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=False, blank=True)
     post_author = models.ForeignKey(User, on_delete=models.CASCADE)

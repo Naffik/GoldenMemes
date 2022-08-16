@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.redirects',
     'rest_framework',
+    'corsheaders',
     'django_filters',
     'user_app',
     'web_app',
@@ -57,6 +58,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+     'http://localhost:3000'
 ]
 
 SITE_ID = 1
@@ -66,9 +72,7 @@ ROOT_URLCONF = 'GoldenMemes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'frontend/build'
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,9 +100,9 @@ WSGI_APPLICATION = 'GoldenMemes.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'GoldenMemes',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': env('POSTGRES_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
         'PORT': '5432',
         'HOST': 'db'
     }
@@ -138,10 +142,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/build/static'
-]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -161,7 +161,7 @@ SIMPLE_JWT = {
 }
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
