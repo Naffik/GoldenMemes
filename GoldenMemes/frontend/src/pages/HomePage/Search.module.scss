@@ -8,14 +8,25 @@
     margin-top: 32px;
   }
 
-  &__body {
+  &_icon {
+    display: block;
+    margin-left: auto;
+  }
+
+  &_body {
     display: flex;
-    justify-content: flex-end;
     gap: 8px;
-    width: 100%;
 
     // @include sm {
     //   font-size: $fontSize_body_mobile;
     // }
+
+    &_searchBtn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      cursor: pointer;
+    }
   }
 }

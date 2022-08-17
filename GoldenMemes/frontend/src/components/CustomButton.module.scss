@@ -1,7 +1,12 @@
 @import "../styles/globals.scss";
 
 .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: $input_height;
+  padding: 0 8px;
+
   font-size: $fontSize_body_desktop;
   font-weight: 500;
   font-family: $font_stack;
