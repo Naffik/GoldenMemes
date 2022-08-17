@@ -2,10 +2,10 @@ import React from "react";
 import styles from "./AddPost.module.scss";
 import * as yup from "yup";
 
-import SubpageContainer from "../../components/SubpageContainer";
-import CustomForm from "../../components/CustomForm";
-import CustomInput from "../../components/CustomInput";
-import SubmitButton from "../../components/SubmitButton";
+import SubpageContainer from "../../components/layoutContainers/SubpageContainer";
+import CustomForm from "../../components/forms/CustomForm";
+import CustomInput from "../../components/forms/CustomInput";
+import SubmitButton from "../../components/forms/SubmitButton";
 
 // const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 

@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 import { useFormikContext } from "formik";
 
 function SubmitButton({ icon = null, value }) {

@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./CustomInput.module.scss";
 import { useFormikContext } from "formik";
+import ErrorMessage from "../ErrorMessage";
 
 function CustomInput({ inputRef = null, styling = "default", name, ...otherProps }) {
   const { handleChange, setFieldTouched, values, errors, touched } = useFormikContext();
@@ -16,7 +17,7 @@ function CustomInput({ inputRef = null, styling = "default", name, ...otherProps
         onChange={handleChange(name)}
         {...otherProps}
       />
-      {touched[name] && errors[name] && <span className={styles.error}>{errors[name]}</span>}
+      {touched[name] && errors[name] && <ErrorMessage message={errors[name]} />}
     </>
   );
 }

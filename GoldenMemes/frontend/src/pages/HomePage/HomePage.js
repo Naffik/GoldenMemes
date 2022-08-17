@@ -1,6 +1,6 @@
 import React from "react";
 //import styles from "./HomePage.module.scss";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layoutContainers/Layout";
 import Search from "./Search";
 import Filters from "./Filters";
 import Post from "../../components/Post";

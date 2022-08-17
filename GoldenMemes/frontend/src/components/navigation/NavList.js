@@ -4,8 +4,8 @@ import { IoMdAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 import NavListItem from "./NavListItem";
-import { ReactComponent as Separator } from "../assets/svg/navlink-separator.svg";
-import CustomButton from "./CustomButton";
+import { ReactComponent as Separator } from "../../assets/svg/navlink-separator.svg";
+import CustomButton from "../CustomButton";
 
 function NavList() {
   return (

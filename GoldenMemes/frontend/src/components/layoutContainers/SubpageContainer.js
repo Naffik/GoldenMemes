@@ -1,7 +1,7 @@
 import React from "react";
 import Wrapper from "./Wrapper";
 import styles from "./SubpageContainer.module.scss";
-import Header from "./Header";
+import Header from "../navigation/Header";
 
 function SubpageContainer({ title, titleBody = "", ...props }) {
   return (

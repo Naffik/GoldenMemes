@@ -1,4 +1,4 @@
-@import "../styles/globals.scss";
+@import "../../styles/globals.scss";
 
 .input-default {
   width: 100%;
@@ -30,9 +30,4 @@
   &:focus {
     outline: 0;
   }
-}
-
-.error {
-  font-size: 14px;
-  color: red;
 }

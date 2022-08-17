@@ -1,7 +1,7 @@
 import React from "react";
 //import styles from "./Layout.module.scss";
 import Wrapper from "./Wrapper";
-import Header from "./Header";
+import Header from "../navigation/Header";
 
 function Layout(props) {
   return (

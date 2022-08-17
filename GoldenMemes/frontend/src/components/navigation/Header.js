@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Header.module.scss";
 
-import Wrapper from "./Wrapper";
+import Wrapper from "../layoutContainers/Wrapper";
 import Logo from "./Logo";
 import Nav from "./Nav";
 import { IoMdMenu, IoMdClose } from "react-icons/io";

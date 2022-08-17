@@ -1,11 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./Search.module.scss";
 import { IoIosSearch } from "react-icons/io";
 import SearchModal from "./SearchModal";
 import { exitSearch, slideSearch } from "../../animations/animations";
 
 function Search() {
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const searchRef = useRef();
   const formRef = useRef();
 
