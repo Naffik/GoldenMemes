@@ -1,5 +1,5 @@
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import generics
+from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from web_app.models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -17,6 +17,10 @@ class PostList(generics.ListAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['post_author__username', 'title']
+    search_fields = ['^title', 'tags__name']
+    ordering_fields = ['title', 'tags__name', 'id', 'created', 'like', 'dislike']
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
