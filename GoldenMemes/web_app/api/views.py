@@ -8,6 +8,7 @@ from web_app.api.pagination import PostPagination
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from datetime import date, timedelta
 import random
 
 
@@ -31,12 +32,10 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         instance.delete()
 
     def update(self, request, *args, **kwargs):
-        # pk = self.kwargs.get('pk')
+        pk = self.kwargs.get('pk')
         slug = slugify(request.data.get('title'))
         response = super(PostDetail, self).update(request, pk=pk, slug=slug)
-        print(reverse('post-detail', kwargs={'slug': slug}))
-        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000'
-                                                + reverse('post-detail', kwargs={'slug': slug}))
+        return response
 
     def perform_update(self, serializer):
         post = Post.objects.filter(slug=self.kwargs.get('slug'))
@@ -123,16 +122,34 @@ class PostRandom(generics.RetrieveAPIView):
 
 
 class PostListBest(generics.ListAPIView):
-    queryset = Post.objects.accepted()
+    queryset = Post.objects.accepted().order_by('-like')
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
+
+class PostListNew(generics.ListAPIView):
+    queryset = Post.objects.new()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
 
 
 class PostListFresh(generics.ListAPIView):
-    queryset = Post.objects.new()
+    queryset = Post.objects.accepted()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
 
+
+class PostListHot(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
+
+    def get_queryset(self, *args, **kwargs):
+        today = date.today()
+        week = today + timedelta(days=-7)
+        post = Post.objects.filter(created__gte=week, status='accepted').order_by('-like')
+        return post
 

@@ -4,9 +4,9 @@ from user_app.models import User
 
 
 STATUS_CHOICE = (
-    ('new', 'Meme is not accepted'),
-    ('accepted', 'Meme is good enough'),
-    ('rejected', 'Meme is rejected')
+    ('new', 'Post is waiting to be accepted'),
+    ('accepted', 'Post is accepted'),
+    ('rejected', 'Post is rejected')
 )
 
 

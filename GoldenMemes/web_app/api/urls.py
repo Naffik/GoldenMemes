@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import (PostList, PostDetail, PostCreate, CommentList, PostListBest, PostListFresh,
-                    CommentDetail, CommentCreate, PostCommentList, PostRandom)
+from .views import (PostList, PostDetail, PostCreate, CommentList, PostListBest, PostListFresh, PostListNew,
+                    PostListHot, CommentDetail, CommentCreate, PostCommentList, PostRandom)
 
 router = DefaultRouter()
 
@@ -19,5 +19,7 @@ urlpatterns = [
     path(r'post/<int:pk>/create-comment/', CommentCreate.as_view(), name='comment_create'),
     path(r'post/random/<status>/', PostRandom.as_view(), name='post_random'),
     path(r'post/best/', PostListBest.as_view(), name='post_list_best'),
-    path(r'post/fresh/', PostListFresh.as_view(), name='post_list_fresh')
+    path(r'post/new/', PostListNew.as_view(), name='post_list_fresh'),
+    path(r'post/fresh/', PostListFresh.as_view(), name='post_list_fresh'),
+    path(r'post/hot/', PostListHot.as_view(), name='post_list-hot')
 ]
