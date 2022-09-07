@@ -6,8 +6,8 @@ import styles from "./NavListItem.module.scss";
 function NavListItem({ icon = null, text, link }) {
   return (
     <Link to={link} className={styles.link}>
-      <li>{text}</li>
       {icon}
+      <li>{text}</li>
     </Link>
   );
 }

@@ -35,7 +35,7 @@ function Registration() {
   const handleSubmit = async (values) => {
     const response = await RegisterCall(values);
     if (response) navigate("/register/success");
-    else setError("Nieoczekiwany błąd spróbuj ponownie");
+    else setError("Nieoczekiwany błąd, spróbuj ponownie.");
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "../RegisterPage/Registration.module.scss";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import CustomForm from "../../components/forms/CustomForm";
 import FormInfoText from "../../components/forms/FormInfoText";
 import { LoginCall } from "../../api/apiCalls";
 import ErrorMessage from "../../components/ErrorMessage";
+import { userLoggedIn } from "../../store/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required().label("Username"),
@@ -20,10 +22,15 @@ function Login() {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async (values) => {
     const response = await LoginCall(values);
-    if (response) navigate("/");
-    else setError(true);
+    if (response) {
+      const { access } = response.data;
+      dispatch(userLoggedIn({ access, username: values.username }));
+      navigate("/");
+    } else setError(true);
   };
 
   return (
