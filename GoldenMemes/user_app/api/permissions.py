@@ -21,3 +21,11 @@ class IsProfileUserOrReadOnly(permissions.BasePermission):
         else:
             return bool(obj.user == request.user or request.user.is_staff)
 
+
+class IsProfileUser(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return bool(obj.user == request.user or request.user.is_staff)
+        else:
+            return bool(obj.user == request.user or request.user.is_staff)

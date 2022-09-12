@@ -6,7 +6,7 @@ from rest_framework import status, generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from user_app.models import User, UserProfile
 from user_app.api.serializers import (RegistrationSerializer, RequestPasswordResetSerializer, SetNewPasswordSerializer,
-                                      UserProfileSerializer)
+                                      UserProfileSerializer, UserProfileFavSerializer)
 from user_app.api.utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -16,7 +16,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
-from .permissions import IsProfileUserOrReadOnly, IsAdminOrReadOnly
+from .permissions import IsProfileUserOrReadOnly, IsAdminOrReadOnly, IsProfileUser
 from .utils import Util
 
 
@@ -148,3 +148,15 @@ class UserProfileList(generics.ListAPIView):
     queryset = UserProfile.objects.all().order_by('pk')
     serializer_class = UserProfileSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+
+class UserProfileFav(generics.RetrieveAPIView):
+    serializer_class = UserProfileFavSerializer
+    permission_classes = [IsProfileUser]
+    lookup_field = 'user'
+
+    def get_object(self, *args, **kwargs):
+        try:
+            return UserProfile.objects.get(user=self.request.user)
+        except UserProfile.DoesNotExist:
+            raise Http404
