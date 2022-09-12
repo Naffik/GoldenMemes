@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category, Like, DisLike
 
 
 class CommentInLine(admin.StackedInline):
@@ -23,3 +23,5 @@ class Comment(admin.ModelAdmin):
 
 
 admin.site.register(Category)
+admin.site.register(Like)
+admin.site.register(DisLike)

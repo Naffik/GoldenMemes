@@ -1,8 +1,12 @@
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import generics, filters
+from rest_framework import generics, filters, status
 from django_filters.rest_framework import DjangoFilterBackend
-from web_app.models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from web_app.models import Post, Comment, Like, DisLike
+from user_app.models import UserProfile
+from .serializers import PostSerializer, CommentSerializer, PostCreateSerializer
 from web_app.api.permissions import IsAdminOrReadOnly, IsCommentUserOrReadOnly, IsPostUserOrReadOnly
 from web_app.api.pagination import PostPagination
 from django.http import HttpResponseRedirect
@@ -51,7 +55,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PostCreate(generics.CreateAPIView):
-    serializer_class = PostSerializer
+    serializer_class = PostCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -60,6 +64,69 @@ class PostCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         post_author = self.request.user
         serializer.save(post_author=post_author)
+
+
+class PostFavAdd(APIView):
+    permission_classes = [IsAuthenticated]
+    bad_request_message = 'An error has occurred'
+
+    def post(self, request):
+        post = get_object_or_404(Post, pk=request.data.get('pk'))
+        user = UserProfile.objects.get(user=request.user)
+        if user not in post.favourites.all():
+            post.favourites.add(user)
+            return Response({'detail': 'User added to post'}, status=status.HTTP_200_OK)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        post = get_object_or_404(Post, pk=request.data.get('pk'))
+        user = UserProfile.objects.get(user=request.user)
+        if user in post.favourites.all():
+            post.favourites.remove(user)
+            return Response({'detail': 'User removed from post'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostLike(APIView):
+    permission_classes = [IsAuthenticated]
+    bad_request_message = 'An error has occurred'
+
+    def post(self, request, *args, **kwargs):
+        post_pk = self.kwargs.get('pk')
+        opinion = self.kwargs.get('opinion')
+
+        post = get_object_or_404(Post, pk=post_pk)
+
+        try:
+            post.dis_like
+        except Post.dis_like.RelatedObjectDoesNotExist as e:
+            DisLike.objects.create(post=post)
+
+        try:
+            post.like
+        except Post.like.RelatedObjectDoesNotExist as e:
+            Like.objects.create(post=post)
+
+        if opinion.lower() == 'like':
+            if request.user in post.like.users.all():
+                post.like.users.remove(request.user)
+                return Response({'detail': 'User removed like'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                post.like.users.add(request.user)
+                post.dis_like.users.remove(request.user)
+                return Response({'detail': 'User added like'}, status=status.HTTP_200_OK)
+
+        elif opinion.lower() == 'dis_like':
+            if request.user in post.dis_like.users.all():
+                post.dis_like.users.remove(request.user)
+                return Response({'detail': 'User removed dis_like'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                post.dis_like.users.add(request.user)
+                post.like.users.remove(request.user)
+                return Response({'detail': 'User added dis_like'}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostCommentList(generics.ListAPIView):
