@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from user_app.models import User, UserProfile
 from user_app.api.serializers import (RegistrationSerializer, RequestPasswordResetSerializer, SetNewPasswordSerializer,
@@ -48,8 +49,7 @@ class RegisterView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class VerifyEmail(generics.GenericAPIView):
-
+class VerifyEmail(APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
@@ -87,7 +87,7 @@ class RequestPasswordResetView(generics.GenericAPIView):
         return Response({'success': 'Email to reset your password has been sent'}, status=status.HTTP_200_OK)
 
 
-class PasswordTokenCheckView(generics.GenericAPIView):
+class PasswordTokenCheckView(APIView):
 
     def get(self, request, uidb64, token):
 
