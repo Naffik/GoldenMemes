@@ -36,7 +36,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=100, unique=False, blank=True)
     post_author = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='media/images/', null=False, verbose_name="")
+    image = models.ImageField(upload_to='images/', null=False, verbose_name="")
     status = models.CharField(choices=STATUS_CHOICE, default='new', max_length=255)
     number_of_comments = models.IntegerField(null=True, default=0)
     tags = TaggableManager()
