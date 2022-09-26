@@ -1,13 +1,14 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from user_app.models import User
+from user_app.models import User, UserProfile
+from taggit.managers import TaggableManager
 
 
-STATUS_CHOICE = (
-    ('new', 'Meme is not accepted'),
-    ('accepted', 'Meme is good enough'),
-    ('rejected', 'Meme is rejected')
-)
+class Category(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class PostManager(models.Manager):
@@ -21,6 +22,13 @@ class PostManager(models.Manager):
         return self.get_queryset().filter(status='accepted')
 
 
+STATUS_CHOICE = (
+    ('new', 'Post is waiting to be accepted'),
+    ('accepted', 'Post is accepted'),
+    ('rejected', 'Post is rejected')
+)
+
+
 class Post(models.Model):
     objects = PostManager()
 
@@ -29,10 +37,10 @@ class Post(models.Model):
     post_author = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='media/images/', null=False, verbose_name="")
-    like = models.IntegerField(null=True, default=0)
-    dislike = models.IntegerField(null=True, default=0)
     status = models.CharField(choices=STATUS_CHOICE, default='new', max_length=255)
     number_of_comments = models.IntegerField(null=True, default=0)
+    tags = TaggableManager()
+    favourites = models.ManyToManyField(UserProfile, related_name="favourite", blank=True, default=None)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -41,6 +49,32 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_total_like(self):
+        return self.like.users.count()
+
+    def get_total_dis_like(self):
+        return self.dis_like.users.count()
+
+
+class Like(models.Model):
+    post = models.OneToOneField(Post, related_name='like', on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='post_likes')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.post.title
+
+
+class DisLike(models.Model):
+    post = models.OneToOneField(Post, related_name='dis_like', on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='post_dis_likes')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.post.title
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
@@ -48,6 +82,7 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     content = models.TextField(max_length=2048)
+    hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.comment_author)

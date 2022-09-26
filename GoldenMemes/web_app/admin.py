@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment
+from .models import Post, Comment, Category, Like, DisLike
 
 
 class CommentInLine(admin.StackedInline):
@@ -20,3 +20,8 @@ class PostAdmin(admin.ModelAdmin):
 class Comment(admin.ModelAdmin):
     list_display = ['id', 'comment_author', 'post', 'content']
     list_filter = ['post']
+
+
+admin.site.register(Category)
+admin.site.register(Like)
+admin.site.register(DisLike)

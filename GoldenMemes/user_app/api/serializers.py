@@ -1,5 +1,7 @@
 from django.contrib.sites.shortcuts import get_current_site
 from user_app.models import User, UserProfile
+from web_app.models import Post
+from web_app.api.serializers import PostFavSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -67,7 +69,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
             user.set_password(password)
             user.save()
-            return (user)
+            return user
         except Exception as e:
             raise AuthenticationFailed('The reset link is invalid', 401)
         return super().validate(attrs)
@@ -78,3 +80,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         exclude = ('id', 'user')
+
+
+class UserProfileFavSerializer(serializers.ModelSerializer):
+    favourite = PostFavSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ('favourite', )
