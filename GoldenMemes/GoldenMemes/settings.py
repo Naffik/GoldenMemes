@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import environ
 from pathlib import Path
 from datetime import timedelta
+import os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -19,6 +20,10 @@ environ.Env.read_env()
 from django.conf.global_settings import STATICFILES_DIRS, EMAIL_HOST
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# MEDIA_ROOT = '/home/dan/mysite/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_pictures')
+MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -155,8 +160,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
+        'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
