@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ErrorMessage.module.scss";
 
 function ErrorMessage({ message }) {
-  return <span className={styles.error}>{message}</span>;
+  return <p className={styles.error}>{message}</p>;
 }
 
 export default ErrorMessage;

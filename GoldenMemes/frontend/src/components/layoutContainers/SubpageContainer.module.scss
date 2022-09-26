@@ -40,10 +40,10 @@
       @include md {
         width: 100%;
       }
-    }
 
-    p {
-      color: $grayColor;
+      &_title {
+        color: $grayColor;
+      }
     }
   }
 }

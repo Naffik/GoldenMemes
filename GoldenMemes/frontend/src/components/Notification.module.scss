@@ -1,0 +1,20 @@
+@import "../styles/globals.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  top: $header_height;
+  right: 16px;
+  padding: 0 64px;
+  margin-top: 16px;
+
+  border-radius: 5px;
+  background: linear-gradient(86.58deg, $successColor 1.37%, $secondaryColor 103.68%);
+
+  &_value {
+    font-weight: 500;
+    color: $whiteColor;
+  }
+}

@@ -15,7 +15,10 @@ function CustomInput({ inputRef = null, styling = "default", name, type, ...othe
         name={name}
         value={values[name]}
         onBlur={() => setFieldTouched(name)}
-        onChange={handleChange(name)}
+        onChange={(e) => {
+          console.log("e", e);
+          setFieldValue(name, e.target.files[0]);
+        }}
         {...otherProps}
       />
 
