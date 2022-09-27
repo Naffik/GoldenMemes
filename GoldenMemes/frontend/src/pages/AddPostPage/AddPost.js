@@ -8,7 +8,7 @@ import CustomInput from "../../components/forms/CustomInput";
 import CustomFileInput from "../../components/forms/CustomFileInput";
 import SubmitButton from "../../components/forms/SubmitButton";
 import { useSelector } from "react-redux";
-import { SubmitPost } from "../../api/apiCalls";
+import { SubmitPostCall } from "../../api/apiCalls";
 import { isFileError } from "../../utils/functions";
 import ErrorMessage from "../../components/ErrorMessage";
 import Notification from "../../components/Notification";
@@ -22,9 +22,10 @@ function AddPost() {
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [notificationKey, setNotificationKey] = useState(0);
+  const [error, setError] = useState(null);
 
   const fileRef = useRef(null);
-
   const token = useSelector((state) => state.accessToken);
 
   useEffect(() => {
@@ -35,10 +36,14 @@ function AddPost() {
   }, []);
 
   const handleSubmit = async (values) => {
-    const finalValues = { ...values, attachment: file };
-    const data = await SubmitPost(finalValues, token);
-    if (data) setNotification("Post added");
-    console.log("DATA", data);
+    const finalValues = { ...values, attachment: file, tags: ["default1", "default2", "default3"] };
+    const data = await SubmitPostCall(finalValues, token);
+    console.log("token", token);
+    if (data) {
+      setNotification("Post added");
+      setNotificationKey(notificationKey + 1);
+      setError(null);
+    } else setError("Wystąpił błąd podczas przetwarzania żądania");
   };
 
   const handleChange = (e) => {
@@ -78,9 +83,12 @@ function AddPost() {
           <span className={styles.container_imageInfo}>*zdjęcie nie może być większe niż 2MB</span>
           {fileError && <ErrorMessage message={fileError} />}
           <SubmitButton value="Dodaj" />
+          {error && <ErrorMessage message={error} />}
         </form>
       </CustomForm>
-      {notification && <Notification message="Dodałeś post!" />}
+      {notification && (
+        <Notification title="Dodałeś post!" message="Będzie on widoczny na stronie głównej" key={notificationKey} />
+      )}
     </SubpageContainer>
   );
 }

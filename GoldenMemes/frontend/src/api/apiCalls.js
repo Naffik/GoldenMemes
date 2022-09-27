@@ -2,6 +2,24 @@ import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000/";
 
+export async function getReq(path, token) {
+  return await axios
+    .get(path, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log("get res:", response);
+      return response;
+    })
+    .catch((err) => {
+      console.log("error get req", err);
+      return null;
+    });
+}
+
 export async function postReq(path, data) {
   return await axios
     .post(path, data)
@@ -14,17 +32,12 @@ export async function postReq(path, data) {
     });
 }
 
-export async function postReqProtected(path, postData, token) {
-  const { title, image } = postData;
-
-  let data = new FormData();
-  data.append("title", title);
-  data.append("image", image);
-
+export async function postReqProtected(path, data, token) {
   return await axios
     .post(path, data, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     })
     .then((response) => {
@@ -45,30 +58,19 @@ export async function RegisterCall({ username, email, password, password2 }) {
   return await postReq(BASE_URL + "account/register/", { username, email, password, password2 });
 }
 
-export async function SubmitPost(data, token) {
-  const { title, attachment } = data;
+export async function SubmitPostCall(data, token) {
+  const { title, attachment, tags } = data;
+
+  let formData = new FormData();
+  formData.append("title", title);
+  formData.append("image", attachment);
+  formData.append("tags", JSON.stringify(tags));
   // console.log("title", title, "aatach", attachment);
-  return await postReqProtected(BASE_URL + "api/post/submit/", { title, image: attachment }, token);
+  return await postReqProtected(BASE_URL + "api/post/submit/", formData, token);
 }
 
-// export async function LoginCall({ username, password }) {
-//   return await axios
-//     .post(BASE_URL + "account/api/token/", { username, password })
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch(() => {
-//       return null;
-//     });
-// }
-
-// export async function RegisterCall({ username, email, password, password2 }) {
-//   return await axios
-//     .post(BASE_URL + "account/register/", { username, email, password, password2 })
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch(() => {
-//       return null;
-//     });
-// }
+export async function PostListCall(token) {
+  const postsData = await getReq(BASE_URL + "api/post/", token);
+  if (postsData) return postsData.data.results;
+  else return null;
+}

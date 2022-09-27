@@ -10,8 +10,19 @@ export function slideUp(el) {
   gsap.from(el, { rotation: 27, x: -100, duration: 1 });
 }
 
-export function slideNotification(el) {
-  gsap.from(el, { x: 350, duration: 0.5, ease: "power2.in" });
+export function slideLeftInAndOut(el, px) {
+  gsap.from(el, {
+    autoAlpha: 0,
+    x: px,
+    duration: 0.5,
+    ease: "power2.in",
+  });
+  gsap.to(el, {
+    x: px,
+    duration: 0.5,
+    delay: 2,
+    ease: "power2.in",
+  });
 }
 
 export function slideSearch(container, elements) {
