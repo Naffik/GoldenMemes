@@ -1,0 +1,40 @@
+@import "../styles/globals.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+  position: absolute;
+  top: $header_height;
+  right: 16px;
+  padding: 16px 64px 16px 16px;
+  margin-top: 16px;
+
+  background: $successColor;
+  border-radius: 4px;
+  visibility: hidden;
+
+  &_icon {
+    color: $whiteColor;
+    font-size: 24px;
+    margin-right: 8px;
+  }
+
+  &_content {
+    display: flex;
+    flex-direction: column;
+
+    color: $whiteColor;
+
+    &_title {
+      font-weight: 600;
+      margin: 0;
+    }
+
+    &_message {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+}

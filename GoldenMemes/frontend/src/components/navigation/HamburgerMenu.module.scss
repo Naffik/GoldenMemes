@@ -1,0 +1,30 @@
+@import "../../styles/globals.scss";
+
+.container {
+  display: none;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: $header_height;
+  background-color: $secondaryColor;
+  z-index: 2;
+
+  @include md {
+    display: block;
+    animation-name: slideHeight;
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.7, 0.12, 0.73, 1);
+  }
+
+  @include sm {
+    top: $header_height_sm;
+  }
+}
+
+.exitMenu {
+  animation-name: slideHeight;
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.7, 0.12, 0.73, 1);
+  animation-direction: reverse;
+}

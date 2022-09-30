@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styles from "./SearchModal.module.scss";
-import CustomInput from "../../components/CustomInput";
-import CustomForm from "../../components/CustomForm";
-import SubmitButton from "../../components/SubmitButton";
-import Wrapper from "../../components/Wrapper";
+import CustomInput from "../../components/forms/CustomInput";
+import CustomForm from "../../components/forms/CustomForm";
+import SubmitButton from "../../components/forms/SubmitButton";
+import Wrapper from "../../components/layoutContainers/Wrapper";
 import { IoIosSearch, IoIosClose } from "react-icons/io";
-import { slideSearch } from "../../animations/animations";
 
 function SearchModal({ exitModal, searchRef, formRef }) {
   return (
