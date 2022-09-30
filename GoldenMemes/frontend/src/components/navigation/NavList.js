@@ -25,7 +25,7 @@ function NavList({ isUser, username }) {
       </Link>
       {isUser ? (
         <div className={styles.list_login}>
-          <NavListItem text={username} link="/login" icon={<FaUserAlt color="#c5a880" />} />
+          <NavListItem text={username} link={`/profile/${username}`} icon={<FaUserAlt color="#c5a880" />} />
           <MdLogout className={styles.list_login_logoutIcon} color="#c5a880" size={20} onClick={handleLogout} />
         </div>
       ) : (

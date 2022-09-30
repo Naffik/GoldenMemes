@@ -8,6 +8,8 @@ import store, { Persistor } from "./store/configureStore";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { injectStore } from "./api/apiCalls";
+import Profile from "./pages/ProfilePage/Profile";
+import PostPage from "./pages/PostPage/PostPage";
 
 function App() {
   injectStore(store); //I can now use redux store in my apiCalls.js file
@@ -21,6 +23,8 @@ function App() {
           <Route path="/register/success" element={<RegistrationSuccess />} />
           <Route path="/login" element={<Login />} />
           <Route path="/add" element={<AddPost />} />
+          <Route path="/profile/:user" element={<Profile />} />
+          <Route path="/post/:id" element={<PostPage />} />
         </Routes>
       </PersistGate>
     </Provider>

@@ -37,6 +37,7 @@
       font-weight: 600;
       font-size: $fontSize_headers_desktop;
       color: #c5a880;
+      cursor: pointer;
 
       @include sm {
         font-size: $fontSize_headers_mobile;
@@ -64,6 +65,7 @@
       &_icon {
         display: block;
         font-size: 24px;
+        cursor: pointer;
       }
 
       &__rates {

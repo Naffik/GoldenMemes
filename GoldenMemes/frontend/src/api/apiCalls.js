@@ -81,7 +81,7 @@ export async function getReq(path) {
   return await instance
     .get(path)
     .then((response) => {
-      console.log("get res:", response);
+      //  console.log("get res:", response);
       return response;
     })
     .catch((err) => {
@@ -95,7 +95,7 @@ export async function getReqProtected(path) {
   return await instanceProtected
     .get(path)
     .then((response) => {
-      console.log("get res:", response);
+      // console.log("get res:", response);
       return response;
     })
     .catch((err) => {

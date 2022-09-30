@@ -15,6 +15,7 @@ function HomePage() {
     const loadData = async () => {
       const posts = await PostListCall();
       if (posts) {
+        console.log("posts", posts);
         let editedPosts = posts.map((post) => {
           return { ...post, created: post.created.slice(0, 10) };
         });
@@ -31,13 +32,14 @@ function HomePage() {
       {posts &&
         posts.map((post) => (
           <Post
+            id={post.id}
             key={post.id}
             author={post.post_author}
             comments={0}
             date={post.created}
-            dislikes={post.dislike}
+            dislikes={post.dis_likes}
             image={post.image}
-            likes={post.like}
+            likes={post.likes}
             title={post.title}
           />
         ))}
