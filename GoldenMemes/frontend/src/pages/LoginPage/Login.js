@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styles from "../RegisterPage/Registration.module.scss";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import FormInfoText from "../../components/forms/FormInfoText";
 import { LoginCall } from "../../api/apiCalls";
 import ErrorMessage from "../../components/ErrorMessage";
 import { userLoggedIn } from "../../store/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required().label("Username"),
