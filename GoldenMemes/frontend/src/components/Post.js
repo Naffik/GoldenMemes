@@ -15,6 +15,7 @@ function Post({ author, comments, date, dislikes, image, likes, title }) {
         <h2>{title}</h2>
         <img src={image} alt="mem" />
         <div className={styles.container__wrapper__bottombar}>
+          <FaFacebookF className={styles.container__wrapper__bottombar_icon} color="#C1C1C1" />
           <div className={styles.container__wrapper__bottombar__rates}>
             <div className={styles.container__wrapper__bottombar_iconContainer}>
               <span>{likes}</span>

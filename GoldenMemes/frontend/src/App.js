@@ -7,8 +7,11 @@ import AddPost from "./pages/AddPostPage/AddPost";
 import store, { Persistor } from "./store/configureStore";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { injectStore } from "./api/apiCalls";
 
 function App() {
+  injectStore(store); //I can now use redux store in my apiCalls.js file
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={Persistor}>

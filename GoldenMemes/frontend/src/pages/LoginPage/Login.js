@@ -27,8 +27,8 @@ function Login() {
   const handleSubmit = async (values) => {
     const response = await LoginCall(values);
     if (response) {
-      const { access } = response.data;
-      dispatch(userLoggedIn({ access, username: values.username }));
+      const { access, refresh } = response.data;
+      dispatch(userLoggedIn({ access, refresh, username: values.username }));
       navigate("/");
     } else setError(true);
   };

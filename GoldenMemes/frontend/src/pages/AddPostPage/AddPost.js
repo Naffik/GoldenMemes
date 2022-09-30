@@ -5,9 +5,7 @@ import * as yup from "yup";
 import SubpageContainer from "../../components/layoutContainers/SubpageContainer";
 import CustomForm from "../../components/forms/CustomForm";
 import CustomInput from "../../components/forms/CustomInput";
-import CustomFileInput from "../../components/forms/CustomFileInput";
 import SubmitButton from "../../components/forms/SubmitButton";
-import { useSelector } from "react-redux";
 import { SubmitPostCall } from "../../api/apiCalls";
 import { isFileError } from "../../utils/functions";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -26,7 +24,6 @@ function AddPost() {
   const [error, setError] = useState(null);
 
   const fileRef = useRef(null);
-  const token = useSelector((state) => state.accessToken);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -37,8 +34,7 @@ function AddPost() {
 
   const handleSubmit = async (values) => {
     const finalValues = { ...values, attachment: file, tags: ["default1", "default2", "default3"] };
-    const data = await SubmitPostCall(finalValues, token);
-    console.log("token", token);
+    const data = await SubmitPostCall(finalValues);
     if (data) {
       setNotification("Post added");
       setNotificationKey(notificationKey + 1);

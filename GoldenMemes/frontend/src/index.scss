@@ -9,6 +9,27 @@ html {
   height: 100%;
 }
 
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: $font_stack;
+  background-color: $primaryColor;
+  color: $whiteColor;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing-: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p {
+  margin: 0;
+}
+
+//SCROLLBAR
 html::-webkit-scrollbar {
   width: 16px;
 }
@@ -21,24 +42,4 @@ html::-webkit-scrollbar-track {
 html::-webkit-scrollbar-thumb {
   background-color: $goldColor;
   border-radius: 100px;
-}
-
-body {
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  font-family: $font_stack;
-  background-color: $primaryColor;
-  color: $whiteColor;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing-: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
 }

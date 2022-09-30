@@ -6,16 +6,14 @@ import Filters from "./Filters";
 import Post from "../../components/Post";
 import { PostListCall } from "../../api/apiCalls";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useSelector } from "react-redux";
 
 function HomePage() {
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
-  const token = useSelector((state) => state.accessToken);
 
   useEffect(() => {
     const loadData = async () => {
-      const posts = await PostListCall(token);
+      const posts = await PostListCall();
       if (posts) {
         let editedPosts = posts.map((post) => {
           return { ...post, created: post.created.slice(0, 10) };
