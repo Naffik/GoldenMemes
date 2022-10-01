@@ -113,8 +113,8 @@ class PostLike(APIView):
         post = get_object_or_404(Post, pk=post_pk)
 
         try:
-            post.dis_like
-        except Post.dis_like.RelatedObjectDoesNotExist as e:
+            post.dislike
+        except Post.dislike.RelatedObjectDoesNotExist as e:
             DisLike.objects.create(post=post)
 
         try:
@@ -128,17 +128,17 @@ class PostLike(APIView):
                 return Response({'detail': 'User removed like'}, status=status.HTTP_204_NO_CONTENT)
             else:
                 post.like.users.add(request.user)
-                post.dis_like.users.remove(request.user)
+                post.dislike.users.remove(request.user)
                 return Response({'detail': 'User added like'}, status=status.HTTP_200_OK)
 
-        elif opinion.lower() == 'dis_like':
-            if request.user in post.dis_like.users.all():
-                post.dis_like.users.remove(request.user)
-                return Response({'detail': 'User removed dis_like'}, status=status.HTTP_204_NO_CONTENT)
+        elif opinion.lower() == 'dislike':
+            if request.user in post.dislike.users.all():
+                post.dislike.users.remove(request.user)
+                return Response({'detail': 'User removed dislike'}, status=status.HTTP_204_NO_CONTENT)
             else:
-                post.dis_like.users.add(request.user)
+                post.dislike.users.add(request.user)
                 post.like.users.remove(request.user)
-                return Response({'detail': 'User added dis_like'}, status=status.HTTP_200_OK)
+                return Response({'detail': 'User added dislike'}, status=status.HTTP_200_OK)
 
         else:
             return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
