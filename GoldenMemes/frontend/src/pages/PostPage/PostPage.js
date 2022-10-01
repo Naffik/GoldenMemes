@@ -12,9 +12,9 @@ function PostPage() {
       <Post
         id={post.id}
         key={post.id}
-        author={post.post_author}
+        author={post.author}
         comments={0}
-        date={post.created}
+        date={post.date}
         dislikes={post.dislikes}
         image={post.image}
         likes={post.likes}

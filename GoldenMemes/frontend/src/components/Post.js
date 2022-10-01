@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FaFacebookF, FaComment } from "react-icons/fa";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
+import { PostDislikeCall, PostLikeCall } from "../api/apiCalls";
 
 function Post(props) {
   const { author, comments, date, dislikes, id, image, likes, title } = props;
@@ -15,6 +16,14 @@ function Post(props) {
   const handleAuthorClick = () => {
     navigate(`/profile/${author}`);
   };
+
+  // const handleLike = async () => {
+  //   let res = await PostLikeCall(id);
+  // };
+
+  // const handleDislike = async () => {
+  //   let res = await PostDislikeCall(id);
+  // };
 
   return (
     <div className={styles.container}>
