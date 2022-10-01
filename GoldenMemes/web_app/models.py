@@ -52,8 +52,8 @@ class Post(models.Model):
     def get_total_like(self):
         return self.like.users.count()
 
-    def get_total_dis_like(self):
-        return self.dis_like.users.count()
+    def get_total_dislike(self):
+        return self.dislike.users.count()
 
 
 class Like(models.Model):
@@ -67,8 +67,8 @@ class Like(models.Model):
 
 
 class DisLike(models.Model):
-    post = models.OneToOneField(Post, related_name='dis_like', on_delete=models.CASCADE)
-    users = models.ManyToManyField(User, related_name='post_dis_likes')
+    post = models.OneToOneField(Post, related_name='dislike', on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='post_dislikes')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
