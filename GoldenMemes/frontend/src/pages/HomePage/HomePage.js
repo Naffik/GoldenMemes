@@ -20,7 +20,7 @@ function HomePage() {
           return { ...post, created: post.created.slice(0, 10) };
         });
         setPosts(editedPosts);
-      } else setError("Wystąpił błąd przy wczytywaniu postów. Spróbuj ponownie później.");
+      } else setError("Wystąpił błąd przy wczytywaniu postów. Odśwież stronę lub spróbuj ponownie później.");
     };
     loadData();
   }, []);

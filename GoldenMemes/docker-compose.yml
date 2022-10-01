@@ -19,4 +19,4 @@ services:
       - POSTGRES_DB=GoldenMemes
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    container_name: postgres_db
+    container_name: postgres
