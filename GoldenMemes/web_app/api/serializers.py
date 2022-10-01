@@ -35,7 +35,7 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
         return instance.get_total_dis_like()
 
 
-class PostCreateSerializer(serializers.ModelSerializer):
+class PostCreateSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     post_author = serializers.StringRelatedField(read_only=True)
 

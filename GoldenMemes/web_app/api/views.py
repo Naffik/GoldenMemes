@@ -1,5 +1,5 @@
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework import generics, filters, status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -19,12 +19,30 @@ import random
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all().order_by('pk')
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
+    pagination_class = PostPagination
+
+
+class PostSearch(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [AllowAny]
     pagination_class = PostPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['post_author__username', 'title']
-    search_fields = ['^title', 'tags__name']
-    ordering_fields = ['title', 'tags__name', 'id', 'created', 'like', 'dislike']
+    search_fields = ['^title']
+    ordering_fields = ['title', 'created', 'like', 'dislike']
+
+    def get_queryset(self, *args, **kwargs):
+        my_tags = []
+        tags = self.request.data.get('tags')
+        if tags is not None:
+            for x in tags.split(','):
+                my_tags.append(x)
+            qs = Post.objects.filter(tags__name__in=my_tags)
+        else:
+            qs = Post.objects.all()
+
+        return qs
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -57,9 +75,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 class PostCreate(generics.CreateAPIView):
     serializer_class = PostCreateSerializer
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Post.objects.all()
 
     def perform_create(self, serializer):
         post_author = self.request.user
@@ -165,9 +180,6 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 class CommentCreate(generics.CreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Comment.objects.all()
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
