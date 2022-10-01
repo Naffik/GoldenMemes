@@ -19,12 +19,8 @@ import random
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all().order_by('pk')
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
     pagination_class = PostPagination
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['post_author__username', 'title']
-    search_fields = ['^title', 'tags__name']
-    ordering_fields = ['title', 'tags__name', 'id', 'created', 'like', 'dislike']
 
 
 class PostSearch(generics.ListAPIView):
@@ -33,10 +29,10 @@ class PostSearch(generics.ListAPIView):
     pagination_class = PostPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['post_author__username', 'title']
-    search_fields = ['^title', 'tags__name']
-    ordering_fields = ['title', 'tags__name', 'id', 'created', 'like', 'dislike']
+    search_fields = ['^title']
+    ordering_fields = ['title', 'created', 'like', 'dislike']
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         my_tags = []
         tags = self.request.data.get('tags')
         if tags is not None:
