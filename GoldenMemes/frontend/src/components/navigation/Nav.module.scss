@@ -1,0 +1,8 @@
+@import "../../styles/globals.scss";
+
+.container {
+  display: block;
+  @include md {
+    display: none;
+  }
+}
