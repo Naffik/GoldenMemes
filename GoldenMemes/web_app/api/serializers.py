@@ -19,7 +19,7 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     post_author = serializers.StringRelatedField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
-    dislike = serializers.SerializerMethodField(read_only=True)
+    dislikes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
@@ -31,8 +31,8 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     def get_likes(self, instance):
         return instance.get_total_like()
 
-    def get_dislike(self, instance):
-        return instance.get_total_dis_like()
+    def get_dislikes(self, instance):
+        return instance.get_total_dislike()
 
 
 class PostCreateSerializer(TaggitSerializer, serializers.ModelSerializer):
