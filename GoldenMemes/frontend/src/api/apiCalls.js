@@ -110,6 +110,7 @@ export async function postReq(path, data) {
   return await instance
     .post(path, data)
     .then((response) => {
+      console.log("response", response);
       return response;
     })
     .catch((err) => {
@@ -162,7 +163,7 @@ export async function SubmitPostCall(data) {
 
 export async function PostListCall(filter) {
   console.log("path", `api/post/${filter}/`);
-  const postsData = await getReq(`api/post/${filter}/`);
+  const postsData = await getReqProtected(`api/post/${filter}/`);
   if (postsData) return postsData.data.results;
   else return null;
 }
