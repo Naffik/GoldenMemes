@@ -1,3 +1,4 @@
+from django.db.models import Exists, OuterRef
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework import generics, filters, status
@@ -17,10 +18,20 @@ import random
 
 
 class PostList(generics.ListAPIView):
-    queryset = Post.objects.all().order_by('pk')
     serializer_class = PostSerializer
     permission_classes = [AllowAny]
     pagination_class = PostPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        profile = UserProfile.objects.get(user=user)
+        if self.request.user.is_authenticated:
+            post = Post.objects.annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_favourite=Exists(Post.objects.filter(favourites=profile))).order_by('pk')
+        else:
+            post = Post.objects.all().order_by('pk')
+        return post
 
 
 class PostSearch(generics.ListAPIView):
@@ -233,6 +244,6 @@ class PostListHot(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         today = date.today()
         week = today + timedelta(days=-7)
-        post = Post.objects.filter(created__gte=week, status='accepted').order_by('-like')
+        post = Post.objects.filter(created__gte=week, status='accepted').order_by('like')
         return post
 

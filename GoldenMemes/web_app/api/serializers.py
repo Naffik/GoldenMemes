@@ -21,12 +21,17 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     dislikes = serializers.SerializerMethodField(read_only=True)
 
+    is_liked = serializers.BooleanField(read_only=True)
+    is_disliked = serializers.BooleanField(read_only=True)
+    is_favourite = serializers.BooleanField(read_only=True)
+
+
     class Meta:
         model = Post
         # exclude = ('number_of_comments',)
         # fields = "__all__"
         fields = ['id', 'tags', 'post_author', 'title', 'slug', 'created', 'image', 'status', 'favourites',
-                  'likes', 'dislikes']
+                  'likes', 'dislikes', 'is_liked', 'is_disliked', 'is_favourite']
 
     def get_likes(self, instance):
         return instance.get_total_like()
