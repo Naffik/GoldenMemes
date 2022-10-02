@@ -173,11 +173,9 @@ export async function SearchByTag(tag) {
 }
 
 export async function PostLikeCall(postId) {
-  const response = await postReqProtected(`api/post/like/${postId}/`);
-  console.log("response like", response);
+  return await postReqProtected(`api/post/like/${postId}/`);
 }
 
 export async function PostDislikeCall(postId) {
-  const response = await postReqProtected(`api/post/dislike/${postId}/`);
-  console.log("response dislike", response);
+  return await postReqProtected(`api/post/dislike/${postId}/`);
 }

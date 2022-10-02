@@ -22,7 +22,10 @@ function HomePage() {
         });
         setPosts(editedPosts);
         setError(null);
-      } else setError("Wystąpił błąd przy wczytywaniu postów. Odśwież stronę lub spróbuj ponownie później.");
+      } else {
+        setError("Wystąpił błąd przy wczytywaniu postów. Odśwież stronę lub spróbuj ponownie później.");
+        setPosts(null);
+      }
     };
     loadData();
   }, [filter]);
@@ -45,6 +48,8 @@ function HomePage() {
             date={post.created}
             dislikes={post.dislikes}
             image={post.image}
+            is_liked={post?.is_liked}
+            is_disliked={post?.is_disliked}
             likes={post.likes}
             title={post.title}
             tags={post.tags}

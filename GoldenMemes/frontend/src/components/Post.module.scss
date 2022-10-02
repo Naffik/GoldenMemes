@@ -75,16 +75,25 @@
         &__like {
           color: #58ae4a;
 
-          &:hover {
+          &:hover,
+          &__active {
             color: #18ad00;
+          }
+
+          &__active {
+            cursor: auto;
           }
         }
 
         &__dislike {
           color: #ae4a4a;
 
-          &:hover {
+          &:hover,
+          &__active {
             color: #ae0505;
+          }
+          &__active {
+            cursor: auto;
           }
         }
 

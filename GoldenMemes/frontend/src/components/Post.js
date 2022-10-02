@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Post.module.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,23 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { PostDislikeCall, PostLikeCall } from "../api/apiCalls";
 
 function Post(props) {
-  const { author, comments, date, dislikes, id, image, likes, tags, title } = props;
+  const {
+    author,
+    comments,
+    date,
+    dislikes,
+    id,
+    image,
+    is_liked = false,
+    is_disliked = false,
+    likes,
+    tags,
+    title,
+  } = props;
+
+  const [likeRating, setLikeRating] = useState({ count: likes, rated: is_liked }); //like ui handling
+  const [dislikeRating, setDislikeRating] = useState({ count: dislikes, rated: is_disliked }); //dislike ui handling
+
   const navigate = useNavigate();
   const handlePostClick = () => {
     navigate(`/post/${id}`, { state: { ...props } });
@@ -19,10 +35,20 @@ function Post(props) {
 
   const handleLike = async () => {
     let res = await PostLikeCall(id);
+    if (res) setLikeRating({ count: likeRating.count + 1, rated: true });
+    if (dislikeRating.rated === true) setDislikeRating({ count: dislikeRating.count - 1, rated: false });
+    else {
+      console.log("WYstąpił błąd podczas ratingu");
+    }
   };
 
   const handleDislike = async () => {
     let res = await PostDislikeCall(id);
+    if (res) setDislikeRating({ count: dislikeRating.count + 1, rated: true });
+    if (likeRating.rated === true) setLikeRating({ count: likeRating.count - 1, rated: false });
+    else {
+      console.log("WYstąpił błąd podczas ratingu");
+    }
   };
 
   const renderTags = () => {
@@ -51,17 +77,21 @@ function Post(props) {
           />
           <div className={styles.container__wrapper__bottombar__rates}>
             <div className={styles.container__wrapper__bottombar_iconContainer}>
-              <span>{likes}</span>
+              <span>{likeRating.count}</span>
               <AiFillLike
-                onClick={handleLike}
-                className={`${styles.container__wrapper__bottombar__icon} ${styles.container__wrapper__bottombar__icon__like}`}
+                onClick={() => !likeRating.rated && handleLike()}
+                className={`${styles.container__wrapper__bottombar__icon} ${
+                  styles.container__wrapper__bottombar__icon__like
+                } ${likeRating.rated && styles.container__wrapper__bottombar__icon__like__active}`}
               />
             </div>
             <div className={styles.container__wrapper__bottombar_iconContainer}>
-              <span>{dislikes}</span>
+              <span>{dislikeRating.count}</span>
               <AiFillDislike
-                onClick={handleDislike}
-                className={`${styles.container__wrapper__bottombar__icon} ${styles.container__wrapper__bottombar__icon__dislike}`}
+                onClick={() => !dislikeRating.rated && handleDislike()}
+                className={`${styles.container__wrapper__bottombar__icon} ${
+                  styles.container__wrapper__bottombar__icon__dislike
+                } ${dislikeRating.rated && styles.container__wrapper__bottombar__icon__dislike__active}`}
               />
             </div>
           </div>
