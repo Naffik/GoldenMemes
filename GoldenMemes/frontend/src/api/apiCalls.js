@@ -51,6 +51,7 @@ instanceProtected.interceptors.response.use(
 
         try {
           const rs = await RequestRefresh();
+          console.log("nowy access", rs);
           if (rs) {
             store.dispatch(userRefreshToken({ rs }));
             instance.defaults.headers.common["Authorization"] = rs;
@@ -81,7 +82,7 @@ export async function getReq(path) {
   return await instance
     .get(path)
     .then((response) => {
-      //  console.log("get res:", response);
+      console.log("get res:", response);
       return response;
     })
     .catch((err) => {
@@ -105,7 +106,7 @@ export async function getReqProtected(path) {
 }
 
 export async function postReq(path, data) {
-  console.log("data", data);
+  //  console.log("data", data);
   return await instance
     .post(path, data)
     .then((response) => {
@@ -148,18 +149,34 @@ export async function RegisterCall({ username, email, password, password2 }) {
 }
 
 export async function SubmitPostCall(data) {
-  const { title, attachment, tags } = data;
+  const { title, attachment, tags, status } = data;
 
   let formData = new FormData();
   formData.append("title", title);
+  formData.append("status", status);
   formData.append("image", attachment);
   formData.append("tags", JSON.stringify(tags));
 
   return await postReqProtected("api/post/submit/", formData);
 }
 
-export async function PostListCall() {
-  const postsData = await getReqProtected("api/post/");
+export async function PostListCall(filter) {
+  console.log("path", `api/post/${filter}/`);
+  const postsData = await getReq(`api/post/${filter}/`);
   if (postsData) return postsData.data.results;
   else return null;
+}
+
+export async function SearchByTag(tag) {
+  //searching
+}
+
+export async function PostLikeCall(postId) {
+  const response = await postReqProtected(`api/post/like/${postId}/`);
+  console.log("response like", response);
+}
+
+export async function PostDislikeCall(postId) {
+  const response = await postReqProtected(`api/post/dislike/${postId}/`);
+  console.log("response dislike", response);
 }

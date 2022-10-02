@@ -10,25 +10,31 @@ import ErrorMessage from "../../components/ErrorMessage";
 function HomePage() {
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState("new");
 
   useEffect(() => {
     const loadData = async () => {
-      const posts = await PostListCall();
+      const posts = await PostListCall(filter);
       if (posts) {
         console.log("posts", posts);
         let editedPosts = posts.map((post) => {
           return { ...post, created: post.created.slice(0, 10) };
         });
         setPosts(editedPosts);
-      } else setError("Wystąpił błąd przy wczytywaniu postów. Spróbuj ponownie później.");
+        setError(null);
+      } else setError("Wystąpił błąd przy wczytywaniu postów. Odśwież stronę lub spróbuj ponownie później.");
     };
     loadData();
-  }, []);
+  }, [filter]);
+
+  const handleFilterClick = (endpointName) => {
+    setFilter(endpointName);
+  };
 
   return (
     <Layout>
       <Search />
-      <Filters />
+      <Filters onClickFilter={handleFilterClick} />
       {posts &&
         posts.map((post) => (
           <Post
@@ -37,13 +43,14 @@ function HomePage() {
             author={post.post_author}
             comments={0}
             date={post.created}
-            dislikes={post.dis_likes}
+            dislikes={post.dislikes}
             image={post.image}
             likes={post.likes}
             title={post.title}
+            tags={post.tags}
           />
         ))}
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorMessage styling={["mt24"]} message={error} />}
     </Layout>
   );
 }

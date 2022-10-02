@@ -1,4 +1,8 @@
-@import "../../styles/globals";
+@import "../styles/globals";
+
+:root {
+  --inputHeight: 48px;
+}
 
 .container {
   visibility: hidden;
@@ -33,6 +37,8 @@
 
     input {
       width: 100%;
+      height: var(--inputHeight);
+
       border-width: 1px;
 
       &:focus {
@@ -41,6 +47,8 @@
     }
 
     button {
+      width: 48px;
+      height: var(--inputHeight);
       background-color: transparent;
       box-shadow: none;
     }
