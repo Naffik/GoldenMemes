@@ -112,5 +112,12 @@
         margin-right: 4px;
       }
     }
+
+    &__tagbar {
+      display: flex;
+      gap: 12px;
+      margin-top: 48px;
+      color: $grayColor;
+    }
   }
 }

@@ -47,6 +47,7 @@ function HomePage() {
             image={post.image}
             likes={post.likes}
             title={post.title}
+            tags={post.tags}
           />
         ))}
       {error && <ErrorMessage styling={["mt24"]} message={error} />}

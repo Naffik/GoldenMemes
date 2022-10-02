@@ -17,10 +17,8 @@ const validationSchema = yup.object().shape({
 });
 
 function AddPost() {
-  const [file, setFile] = useState(null);
-  const [fileError, setFileError] = useState(null);
-  const [notification, setNotification] = useState(null);
-  const [notificationKey, setNotificationKey] = useState(0);
+  const [file, setFile] = useState({ file: null, error: null });
+  const [notification, setNotification] = useState({ message: null, key: 0 });
   const [error, setError] = useState(null);
 
   const fileRef = useRef(null);
@@ -33,23 +31,22 @@ function AddPost() {
   }, []);
 
   const handleSubmit = async (values) => {
-    const finalValues = { ...values, attachment: file, tags: ["default1", "default2", "default3"] };
+    const finalValues = { ...values, attachment: file.file, tags: ["tag1", "tag2", "default3"] };
     const data = await SubmitPostCall(finalValues);
     if (data) {
-      setNotification("Post added");
-      setNotificationKey(notificationKey + 1);
+      setNotification((old) => ({ ...old, message: "Post added" }));
+      setNotification((old) => ({ ...old, key: old.key + 1 }));
       setError(null);
     } else setError("Wystąpił błąd podczas przetwarzania żądania");
   };
 
   const handleChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     const error = isFileError(file.size, file.type);
     if (!error) {
-      setFile(e.target.files[0]);
-      setFileError(null);
-    } else setFileError(error);
+      setFile((old) => ({ ...old, file: e.target.files[0] }));
+      setFile((old) => ({ ...old, error: null }));
+    } else setFile((old) => ({ ...old, error: error }));
   };
 
   const handleUpload = () => {
@@ -66,7 +63,7 @@ function AddPost() {
         onSubmit={(values, { resetForm }) => {
           handleSubmit(values);
           resetForm();
-          setFile(null);
+          setFile({ file: null, error: null });
         }}
         validationSchema={validationSchema}
       >
@@ -74,16 +71,19 @@ function AddPost() {
           <CustomInput type="text" name="title" placeholder="Tytuł..." styling="secondary" />
           <input ref={fileRef} hidden type="file" name="attach" onChange={handleChange} />
           <div className={styles.container_uploadBtn} onClick={handleUpload}>
-            <span className={styles.container_uploadBtn_name}> {file ? file.name : "Wybierz zdjęcie"} </span>
+            <span className={styles.container_uploadBtn_name}>
+              {file.file ? file["file"].name : "Wybierz zdjęcie"}{" "}
+            </span>
           </div>
-          <span className={styles.container_imageInfo}>*zdjęcie nie może być większe niż 2MB</span>
-          {fileError && <ErrorMessage message={fileError} />}
+          <p className={styles.container_imageInfo}>*zdjęcie nie może być większe niż 2MB</p>
+          {file.error && <ErrorMessage message={file.error} />}
+          <CustomInput type="text" name="tags" placeholder="Dodaj tagi po spacji..." styling="secondary-small" />
           <SubmitButton value="Dodaj" />
           {error && <ErrorMessage message={error} />}
         </form>
       </CustomForm>
-      {notification && (
-        <Notification title="Dodałeś post!" message="Będzie on widoczny na stronie głównej" key={notificationKey} />
+      {notification.message && (
+        <Notification title="Dodałeś post!" message="Będzie on widoczny na stronie głównej" key={notification.key} />
       )}
     </SubpageContainer>
   );

@@ -18,14 +18,27 @@
   }
 }
 
-.input-secondary {
+.input-secondary,
+.input-secondary-small {
   height: auto;
+  font-size: 32px;
+  font-weight: 500;
   color: $grayColor;
   border: none;
   border-bottom: 3px solid $darkGoldColor;
   background-color: transparent;
   box-shadow: none;
   border-radius: 0;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.input-secondary-small {
+  font-size: 16px;
+  font-weight: 400;
+  border-bottom: 1px solid $darkGoldColor;
 
   &:focus {
     outline: 0;

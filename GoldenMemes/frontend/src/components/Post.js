@@ -7,7 +7,7 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { PostDislikeCall, PostLikeCall } from "../api/apiCalls";
 
 function Post(props) {
-  const { author, comments, date, dislikes, id, image, likes, title } = props;
+  const { author, comments, date, dislikes, id, image, likes, tags, title } = props;
   const navigate = useNavigate();
   const handlePostClick = () => {
     navigate(`/post/${id}`, { state: { ...props } });
@@ -24,6 +24,16 @@ function Post(props) {
   // const handleDislike = async () => {
   //   let res = await PostDislikeCall(id);
   // };
+
+  const renderTags = () => {
+    return (
+      <>
+        {tags.map((tag) => (
+          <p>#{tag}</p>
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className={styles.container}>
@@ -60,6 +70,7 @@ function Post(props) {
             />
           </div>
         </div>
+        <div className={styles.container__wrapper__tagbar}>{renderTags()}</div>
       </div>
     </div>
   );

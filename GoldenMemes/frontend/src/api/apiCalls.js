@@ -161,9 +161,13 @@ export async function SubmitPostCall(data) {
 
 export async function PostListCall(filter) {
   console.log("path", `api/post/${filter}/`);
-  const postsData = await getReq(`api/post/${filter}/`);
+  const postsData = await getReq(`api/post/`);
   if (postsData) return postsData.data.results;
   else return null;
+}
+
+export async function SearchByTag(tag) {
+  //searching
 }
 
 // export async function PostLikeCall(postId) {
