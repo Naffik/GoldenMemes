@@ -28,8 +28,8 @@ function Post(props) {
   const renderTags = () => {
     return (
       <>
-        {tags.map((tag) => (
-          <p>#{tag}</p>
+        {tags.map((tag, idx) => (
+          <p key={idx}>#{tag}</p>
         ))}
       </>
     );

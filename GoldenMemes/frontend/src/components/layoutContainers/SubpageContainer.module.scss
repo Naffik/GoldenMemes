@@ -47,6 +47,10 @@
     }
     &_content {
       width: 55%;
+
+      @include md {
+        width: 100%;
+      }
     }
   }
 }
