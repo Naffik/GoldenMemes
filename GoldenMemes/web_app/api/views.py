@@ -24,8 +24,8 @@ class PostList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        profile = UserProfile.objects.get(user=user)
-        if self.request.user.is_authenticated:
+        if user.is_authenticated:
+            profile = UserProfile.objects.get(user=user)
             post = Post.objects.annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
                                          is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
                                          is_favourite=Exists(Post.objects.filter(favourites=profile))).order_by('pk')
@@ -216,24 +216,54 @@ class PostRandom(generics.RetrieveAPIView):
 
 
 class PostListBest(generics.ListAPIView):
-    queryset = Post.objects.accepted().order_by('-like')
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            profile = UserProfile.objects.get(user=user)
+            post = Post.objects.annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_favourite=Exists(Post.objects.filter(favourites=profile))).order_by('like')
+        else:
+            post = Post.objects.all().order_by('like')
+        return post
 
 
 class PostListNew(generics.ListAPIView):
-    queryset = Post.objects.new()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            profile = UserProfile.objects.get(user=user)
+            post = Post.objects.new().annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_favourite=Exists(Post.objects.filter(favourites=profile)))
+        else:
+            post = Post.objects.new()
+        return post
 
 
 class PostListFresh(generics.ListAPIView):
-    queryset = Post.objects.accepted()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            profile = UserProfile.objects.get(user=user)
+            post = Post.objects.accepted().annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_favourite=Exists(Post.objects.filter(favourites=profile)))
+        else:
+            post = Post.objects.accepted()
+        return post
 
 
 class PostListHot(generics.ListAPIView):
@@ -241,9 +271,17 @@ class PostListHot(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         today = date.today()
         week = today + timedelta(days=-7)
-        post = Post.objects.filter(created__gte=week, status='accepted').order_by('like')
-        return post
+        user = self.request.user
+        if user.is_authenticated:
 
+            profile = UserProfile.objects.get(user=user)
+            post = Post.objects.annotate(is_liked=Exists(Like.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_disliked=Exists(DisLike.objects.filter(users=user, post=OuterRef('pk'))),
+                                         is_favourite=Exists(Post.objects.filter(favourites=profile))
+                                         ).filter(created__gte=week, status='accepted').order_by('like')
+        else:
+            post = Post.objects.filter(created__gte=week, status='accepted').order_by('like')
+        return post
