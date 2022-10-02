@@ -6,18 +6,19 @@ import { ReactComponent as StopwatchIcon } from "../../assets/svg/stopwatch_emoj
 import { ReactComponent as ConfettiIcon } from "../../assets/svg/confetti_emoji.svg";
 import { ReactComponent as RandomIcon } from "../../assets/svg/random_icon.svg";
 
-function Filters() {
+function Filters({ onClickFilter }) {
   const [active, setActive] = useState(1);
 
   const tiles = [
-    { text: "Gorące", icon: <FireIcon /> },
-    { text: "Najnowsze", icon: <StopwatchIcon /> },
-    { text: "Najlepsze", icon: <ConfettiIcon /> },
-    { text: "Losowe", icon: <RandomIcon /> },
+    { text: "Gorące", icon: <FireIcon />, endpoint: "hot" },
+    { text: "Najnowsze", icon: <StopwatchIcon />, endpoint: "new" },
+    { text: "Najlepsze", icon: <ConfettiIcon />, endpoint: "" },
+    { text: "Losowe", icon: <RandomIcon />, endpoint: "random" },
   ];
 
-  const handleTileClick = (index) => {
+  const handleTileClick = (index, name) => {
     setActive(index);
+    onClickFilter(name);
   };
 
   return (
@@ -29,7 +30,7 @@ function Filters() {
             text={tile.text}
             icon={tile.icon}
             active={active === idx ? true : false}
-            onClick={() => handleTileClick(idx)}
+            onClick={() => handleTileClick(idx, tile.endpoint)}
           />
         );
       })}

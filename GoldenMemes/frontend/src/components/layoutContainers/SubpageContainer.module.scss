@@ -35,7 +35,7 @@
     }
 
     &_intro {
-      width: 50%;
+      width: 45%;
 
       @include md {
         width: 100%;
@@ -43,6 +43,13 @@
 
       &_title {
         color: $grayColor;
+      }
+    }
+    &_content {
+      width: 55%;
+
+      @include md {
+        width: 100%;
       }
     }
   }

@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./SearchModal.module.scss";
-import CustomInput from "../../components/forms/CustomInput";
-import CustomForm from "../../components/forms/CustomForm";
-import SubmitButton from "../../components/forms/SubmitButton";
-import Wrapper from "../../components/layoutContainers/Wrapper";
+import CustomInput from "./forms/CustomInput";
+import CustomForm from "./forms/CustomForm";
+import SubmitButton from "./forms/SubmitButton";
+import Wrapper from "./layoutContainers/Wrapper";
 import { IoIosSearch, IoIosClose } from "react-icons/io";
 
 function SearchModal({ exitModal, searchRef, formRef }) {

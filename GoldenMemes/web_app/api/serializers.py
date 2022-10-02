@@ -20,9 +20,11 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     post_author = serializers.StringRelatedField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
     dislikes = serializers.SerializerMethodField(read_only=True)
+
     is_liked = serializers.BooleanField(read_only=True)
     is_disliked = serializers.BooleanField(read_only=True)
     is_favourite = serializers.BooleanField(read_only=True)
+
 
     class Meta:
         model = Post

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styles from "./Search.module.scss";
 import { IoIosSearch } from "react-icons/io";
-import SearchModal from "./SearchModal";
+import SearchModal from "../../components/SearchModal";
 import { exitSearch, slideSearch } from "../../animations/animations";
 
 function Search() {

@@ -15,7 +15,7 @@ function SubpageContainer({ title, titleBody = "", ...props }) {
               <h2>{title}</h2>
               <p className={styles.container_wrapper_intro_title}>{titleBody}</p>
             </div>
-            {props.children}
+            <div className={styles.container_wrapper_content}>{props.children}</div>
           </div>
         </Wrapper>
       </div>

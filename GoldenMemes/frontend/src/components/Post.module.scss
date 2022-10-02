@@ -25,6 +25,7 @@
 
       span {
         color: $grayColor;
+        cursor: pointer;
 
         &:nth-child(2) {
           font-style: italic;
@@ -62,10 +63,35 @@
         justify-content: center;
       }
 
-      &_icon {
+      &__icon {
         display: block;
-        font-size: 24px;
+        font-size: 28px;
         cursor: pointer;
+
+        &__facebook {
+          font-size: 24px;
+        }
+
+        &__like {
+          color: #58ae4a;
+
+          &:hover {
+            color: #18ad00;
+          }
+        }
+
+        &__dislike {
+          color: #ae4a4a;
+
+          &:hover {
+            color: #ae0505;
+          }
+        }
+
+        &__comment {
+          font-size: 24px;
+          color: #dfa716;
+        }
       }
 
       &__rates {
@@ -85,6 +111,13 @@
       span {
         margin-right: 4px;
       }
+    }
+
+    &__tagbar {
+      display: flex;
+      gap: 12px;
+      margin-top: 48px;
+      color: $grayColor;
     }
   }
 }
