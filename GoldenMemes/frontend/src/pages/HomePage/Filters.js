@@ -11,9 +11,9 @@ function Filters({ onClickFilter }) {
 
   const tiles = [
     { text: "Gorące", icon: <FireIcon />, endpoint: "hot" },
-    { text: "Najnowsze", icon: <StopwatchIcon />, endpoint: "fresh" },
+    { text: "Najnowsze", icon: <StopwatchIcon />, endpoint: "new" },
     { text: "Najlepsze", icon: <ConfettiIcon />, endpoint: "" },
-    { text: "Losowe", icon: <RandomIcon />, endpoint: "" },
+    { text: "Losowe", icon: <RandomIcon />, endpoint: "random" },
   ];
 
   const handleTileClick = (index, name) => {

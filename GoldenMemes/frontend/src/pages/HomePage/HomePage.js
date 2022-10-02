@@ -10,7 +10,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 function HomePage() {
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("fresh");
+  const [filter, setFilter] = useState("new");
 
   useEffect(() => {
     const loadData = async () => {

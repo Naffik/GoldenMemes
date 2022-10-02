@@ -17,13 +17,13 @@ function Post(props) {
     navigate(`/profile/${author}`);
   };
 
-  // const handleLike = async () => {
-  //   let res = await PostLikeCall(id);
-  // };
+  const handleLike = async () => {
+    let res = await PostLikeCall(id);
+  };
 
-  // const handleDislike = async () => {
-  //   let res = await PostDislikeCall(id);
-  // };
+  const handleDislike = async () => {
+    let res = await PostDislikeCall(id);
+  };
 
   const renderTags = () => {
     return (
@@ -53,12 +53,14 @@ function Post(props) {
             <div className={styles.container__wrapper__bottombar_iconContainer}>
               <span>{likes}</span>
               <AiFillLike
+                onClick={handleLike}
                 className={`${styles.container__wrapper__bottombar__icon} ${styles.container__wrapper__bottombar__icon__like}`}
               />
             </div>
             <div className={styles.container__wrapper__bottombar_iconContainer}>
               <span>{dislikes}</span>
               <AiFillDislike
+                onClick={handleDislike}
                 className={`${styles.container__wrapper__bottombar__icon} ${styles.container__wrapper__bottombar__icon__dislike}`}
               />
             </div>

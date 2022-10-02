@@ -31,7 +31,7 @@ function AddPost() {
   }, []);
 
   const handleSubmit = async (values) => {
-    const finalValues = { ...values, attachment: file.file, tags: ["tag1", "tag2", "default3"] };
+    const finalValues = { ...values, attachment: file.file, status: "accepted", tags: ["tag1", "tag2", "default3"] };
     const data = await SubmitPostCall(finalValues);
     if (data) {
       setNotification((old) => ({ ...old, message: "Post added" }));

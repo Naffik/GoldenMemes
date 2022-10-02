@@ -149,10 +149,11 @@ export async function RegisterCall({ username, email, password, password2 }) {
 }
 
 export async function SubmitPostCall(data) {
-  const { title, attachment, tags } = data;
+  const { title, attachment, tags, status } = data;
 
   let formData = new FormData();
   formData.append("title", title);
+  formData.append("status", status);
   formData.append("image", attachment);
   formData.append("tags", JSON.stringify(tags));
 
@@ -161,7 +162,7 @@ export async function SubmitPostCall(data) {
 
 export async function PostListCall(filter) {
   console.log("path", `api/post/${filter}/`);
-  const postsData = await getReq(`api/post/`);
+  const postsData = await getReq(`api/post/${filter}/`);
   if (postsData) return postsData.data.results;
   else return null;
 }
@@ -170,12 +171,12 @@ export async function SearchByTag(tag) {
   //searching
 }
 
-// export async function PostLikeCall(postId) {
-//   const response = await postReqProtected(`api/post/like/${postId}/`);
-//   console.log("response like", response);
-// }
+export async function PostLikeCall(postId) {
+  const response = await postReqProtected(`api/post/like/${postId}/`);
+  console.log("response like", response);
+}
 
-// export async function PostDislikeCall(postId) {
-//   const response = await postReqProtected(`api/post/dislike/${postId}/`);
-//   console.log("response dislike", response);
-// }
+export async function PostDislikeCall(postId) {
+  const response = await postReqProtected(`api/post/dislike/${postId}/`);
+  console.log("response dislike", response);
+}
