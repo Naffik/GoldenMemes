@@ -68,7 +68,7 @@ To demonstrate how to use the API to send data, we will use Postman, a popular A
 6. The response will be displayed in the "Body" section of the Postman interface. The response will be in JSON format and will include the data retrieved from the API. It should look like this:
 ```json
 {
-"username": "example",
-"email": "example@example.com"
+    "username": "example",
+    "email": "example@example.com"
 }
 ```
